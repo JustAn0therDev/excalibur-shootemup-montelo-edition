@@ -1,9 +1,10 @@
 import * as ex from "excalibur";
+import Game from '../game';
+
 import Config from "../config";
 import { gameSheet } from "../resources";
-import { Baddie } from "./baddie";
 
-export class Bullet extends ex.Actor {
+export default class Bullet extends ex.Actor {
     public owner?: ex.Actor;
     constructor(x: number, y: number, dx: number, dy: number, owner?: ex.Actor) {
         super({
@@ -35,6 +36,6 @@ export class Bullet extends ex.Actor {
 
     private killAndRemoveFromBullets() {
         this.kill();
-        ex.Util.removeItemFromArray(this, Baddie.Bullets);
+        ex.Util.removeItemFromArray(this, Game.baddieBullets);
     }
 }

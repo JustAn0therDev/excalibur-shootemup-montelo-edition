@@ -1,14 +1,13 @@
 import * as ex from "excalibur";
+import Game from '../game';
 import { Sounds, gameSheet, explosionSpriteSheet } from "../resources";
 import Config from "../config";
-import { Bullet } from "./bullet";
+import Bullet from "./bullet";
 import { animManager } from "./animation-manager";
 import stats from "../stats";
+import actorUtils from "../utils/actorUtils";
 
-export class Baddie extends ex.Actor {
-    // All bullets belonging to baddies
-    public static Bullets: Bullet[] = [];
-
+export default class Baddie extends ex.Actor {
     private anim?: ex.Animation;
     private explode?: ex.Animation;
     private fireTimer?: ex.Timer;
@@ -49,16 +48,15 @@ export class Baddie extends ex.Actor {
                     .repeatForever();
 
         // Setup firing timer, repeats forever
-        this.fireTimer = new ex.Timer(() => { this.fire(engine) }, Config.enemyFireInterval, true, -1);
+        let intervalToMakeTimerRepeatForever = -1;
+        this.fireTimer = new ex.Timer(() => { this.fire(engine) }, Config.enemyFireInterval, true, intervalToMakeTimerRepeatForever);
         engine.addTimer(this.fireTimer);
-
     }
 
-    // Fires before excalibur collision resoulation
+    // Fires before excalibur collision resolution
     private onPreCollision(evt: ex.PreCollisionEvent) {
         // only kill a baddie if it collides with something that isn't a baddie or a baddie bullet
-        if(!(evt.other instanceof Baddie) &&
-           !ex.Util.contains(Baddie.Bullets, evt.other)) {
+        if(!actorUtils.collisionEventCameFromBulletOrBaddie(evt)) {
             Sounds.explodeSound.play();
             if (this.explode) {
                 animManager.play(this.explode, this.pos);
@@ -70,7 +68,7 @@ export class Baddie extends ex.Actor {
             }
 
             this.kill();
-         }
+        }
     }
 
     private fire(engine: ex.Engine) {
@@ -80,7 +78,7 @@ export class Baddie extends ex.Actor {
             Config.enemyBulletVelocity * Math.sin(this.fireAngle));
 
         const bullet = new Bullet(this.pos.x, this.pos.y, bulletVelocity.x, bulletVelocity.y, this);
-        Baddie.Bullets.push(bullet);
+        Game.baddieBullets.push(bullet);
         engine.add(bullet);
     }
 }

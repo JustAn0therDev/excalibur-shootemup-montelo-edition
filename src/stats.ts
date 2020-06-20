@@ -9,6 +9,4 @@ class Stats {
     }
 }
 
-const stats = new Stats()
-
-export default stats; 
+export default new Stats();

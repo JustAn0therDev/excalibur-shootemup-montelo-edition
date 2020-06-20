@@ -2,12 +2,14 @@ import * as ex from 'excalibur';
 import { Ship } from './actors/ship';
 
 import stats from './stats';
-import { Baddie } from './actors/baddie';
+import Baddie from './actors/baddie';
+import Bullet from './actors/bullet';
 import Config from './config';
 
 import { animManager } from './actors/animation-manager';
 
-export class Game extends ex.Scene {
+export default class Game extends ex.Scene {
+    public static baddieBullets: Array<Bullet> = new Array<Bullet>();
 
     constructor(engine: ex.Engine) {
         super(engine);
@@ -27,24 +29,31 @@ export class Game extends ex.Scene {
         });
         engine.add(scoreLabel);
 
-        const gameOverLabel = new ex.Label("Game Over", engine.halfDrawWidth - 250, engine.halfDrawHeight);
+        const gameOverLabel = new ex.Label("Game Over",
+                                            engine.halfDrawWidth - 250,
+                                            engine.halfDrawHeight);
+
         gameOverLabel.color = ex.Color.Green.clone();
         gameOverLabel.scale = new ex.Vector(8,8);
-        gameOverLabel.actions.blink(1000, 1000, 400).repeatForever();
+        gameOverLabel.actions
+        .blink(1000, 1000, 400)
+        .repeatForever();
 
         const baddieTimer: ex.Timer = new ex.Timer(() => {
-            const bad: Baddie = new Baddie(Math.random()*1000 + 200, -100, 80, 80);
-            engine.add(bad);    
+            let vectorX = Math.random() * 1000;
+            let vectorY = -100;
+            let defaultSize = 80;
+            const bad: Baddie = new Baddie(vectorX, vectorY, defaultSize, defaultSize);
+            engine.add(bad);
         }, Config.spawnTimeInMilisseconds, true, -1);
 
         engine.addTimer(baddieTimer);
 
-        engine.on('preupdate', (evt: ex.PreUpdateEvent) => {
+        engine.on('preupdate', () => {
             if (stats.gameOver) {
-                engine.add(gameOverLabel);
+                engine.add(gameOverLabel); 
+                engine.removeTimer(baddieTimer);
             }
         });
-
     }
-
 }

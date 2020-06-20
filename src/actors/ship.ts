@@ -1,18 +1,18 @@
 import * as ex from "excalibur";
 import { gameSheet, Sounds, explosionSpriteSheet } from "../resources";
 import Config from "../config";
-import { Bullet } from "./bullet";
-import { Baddie } from "./baddie";
+import Bullet from "./bullet";
+import ActorUtils from "../utils/actorUtils";
 import { animManager } from "./animation-manager";
 import stats from "../stats";
+import { FireFunction } from '../types/FireFunction';
 
-type FireFunction = (engine: ex.Engine) => void;
 const throttle = function(this: any, func: FireFunction, throttle: number): FireFunction {
     var lastTime = Date.now();
     var throttle = throttle;
     return (engine: ex.Engine) => {
        var currentTime = Date.now();
-       if(currentTime - lastTime > throttle){
+       if (currentTime - lastTime > throttle) {
           var val = func.apply(this, [engine]);
           lastTime = currentTime;
           return val;
@@ -60,14 +60,14 @@ export class Ship extends ex.Actor {
     }
 
     onPreCollision(evt: ex.PreCollisionEvent) {
-        if(evt.other instanceof Baddie || ex.Util.contains(Baddie.Bullets, evt.other)){
+        if(ActorUtils.collisionEventCameFromBulletOrBaddie(evt)){
             Sounds.hitSound.play();
             this.actions.blink(300, 300, 3);
             stats.hp -= Config.enemyDamage;
             if (stats.hp <= 0) {
                 stats.gameOver = true;
                 this.kill();
-                this.stopReadingFireInput();
+                this.stopRegisteringFireInput();
             }
          }
     }
@@ -86,7 +86,7 @@ export class Ship extends ex.Actor {
        if(this.pos.y > engine.drawHeight - this.height) this.pos.y = (engine.drawHeight - this.height);
     }
 
-    private stopReadingFireInput = () => {
+    private stopRegisteringFireInput = () => {
         this.throttleFire = undefined;
     }
 
@@ -120,27 +120,28 @@ export class Ship extends ex.Actor {
         // Some keys do the same thing
         if (evt.key === ex.Input.Keys.Up ||
             evt.key === ex.Input.Keys.W) {
-            dir.y += -1;
+            dir.y--;
         }
 
         if (evt.key === ex.Input.Keys.Left ||
             evt.key === ex.Input.Keys.A) {
-            dir.x += -1;
+            dir.x--;
         }
 
-        //Has to be removed from the debug option to work though
         if (evt.key === ex.Input.Keys.Right ||
             evt.key === ex.Input.Keys.D) {
-            dir.x += 1;
+            dir.x++;
         }
 
         if (evt.key === ex.Input.Keys.Down ||
             evt.key ===  ex.Input.Keys.S) {
-            dir.y += 1;
+            dir.y++;
         }
 
         if (dir.x !== 0 || dir.y !== 0) {
-            this.vel = dir.normalize().scale(Config.playerSpeed);
+            this.vel = dir
+            .normalize()
+            .scale(Config.playerSpeed);
         }
     }
 }

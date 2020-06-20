@@ -5,7 +5,7 @@ import Config from "../config";
 import Bullet from "./bullet";
 import { animManager } from "./animation-manager";
 import stats from "../stats";
-import actorUtils from "../utils/actorUtils";
+import ActorUtils from "../utils/actorUtils";
 
 export default class Baddie extends ex.Actor {
     private anim?: ex.Animation;
@@ -56,7 +56,7 @@ export default class Baddie extends ex.Actor {
     // Fires before excalibur collision resolution
     private onPreCollision(evt: ex.PreCollisionEvent) {
         // only kill a baddie if it collides with something that isn't a baddie or a baddie bullet
-        if(!actorUtils.collisionEventCameFromBulletOrBaddie(evt)) {
+        if(!ActorUtils.collisionEventCameFromBulletOrBaddie(evt)) {
             Sounds.explodeSound.play();
             if (this.explode) {
                 animManager.play(this.explode, this.pos);

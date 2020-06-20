@@ -8,7 +8,7 @@ export default class ActorUtils {
             || ex.Util.contains(Game.baddieBullets, evt.other);
     }
 
-    public static collistionEventCameFromBaddie(evt: ex.PreCollisionEvent) {
+    public static collistionEventCameFromBaddie(evt: ex.PreCollisionEvent): boolean {
         return evt.other instanceof Baddie;
     }
 }

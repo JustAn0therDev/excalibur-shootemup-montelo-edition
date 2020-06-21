@@ -49,7 +49,7 @@ export default class Baddie extends ex.Actor {
 
         // Setup firing timer, repeats forever
         let intervalToMakeTimerRepeatForever = -1;
-        this.fireTimer = new ex.Timer(() => { this.fire(engine) }, Config.enemyFireInterval, true, intervalToMakeTimerRepeatForever);
+        this.fireTimer = new ex.Timer(() => { this.fire(engine) }, Config.enemyFireIntervalInMilisseconds, true, intervalToMakeTimerRepeatForever);
         engine.addTimer(this.fireTimer);
     }
 
@@ -62,7 +62,7 @@ export default class Baddie extends ex.Actor {
                 animManager.play(this.explode, this.pos);
             }
 
-            stats.score += 100;
+            stats.score += Config.scoreGainedFromKillingEnemy;
             if (this.fireTimer) {
                 this.fireTimer.cancel();
             }

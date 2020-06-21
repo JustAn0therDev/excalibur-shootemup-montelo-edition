@@ -3,13 +3,16 @@ import { Ship } from './actors/ship';
 
 import stats from './stats';
 import Baddie from './actors/baddie';
+import Boss from './actors/boss';
 import Bullet from './actors/bullet';
 import Config from './config';
 
 import { animManager } from './actors/animation-manager';
+import { randomIntFromInterval } from './utils/numberUtils';
 
 export default class Game extends ex.Scene {
     public static baddieBullets: Array<Bullet> = new Array<Bullet>();
+    private CHANCES_OF_GENERATING_BOSS = 10;
 
     constructor(engine: ex.Engine) {
         super(engine);
@@ -45,22 +48,34 @@ export default class Game extends ex.Scene {
         instructionsLabel.color = ex.Color.Green.clone();
         instructionsLabel.scale = new ex.Vector(4,4);
 
-        const baddieTimer: ex.Timer = new ex.Timer(() => {
-            let vectorX = Math.random() * 1000;
-            let vectorY = -100;
-            let defaultSize = 80;
-            const bad: Baddie = new Baddie(vectorX, vectorY, defaultSize, defaultSize);
-            engine.add(bad);
-        }, Config.spawnTimeInMilisseconds, true, -1);
+        const enemyTimer = this.generateEnemyTimer(engine);
 
-        engine.addTimer(baddieTimer);
+        engine.addTimer(enemyTimer);
 
         engine.on('preupdate', () => {
             if (stats.gameOver) {
                 engine.add(gameOverLabel); 
                 engine.add(instructionsLabel);
-                engine.removeTimer(baddieTimer);
+                engine.removeTimer(enemyTimer);
             }
         });
+    }
+
+    private generateEnemyTimer(engine: ex.Engine): ex.Timer {
+        const enemyTimer: ex.Timer = new ex.Timer(() => {
+            let vectorX = Math.random() * 1000;
+            let vectorY = -100;
+            let defaultSize = 80;
+            let shouldgenerateBoss: boolean = randomIntFromInterval(1, 100) <= this.CHANCES_OF_GENERATING_BOSS;
+
+            if (shouldgenerateBoss) {
+                engine.add(new Boss(vectorX, vectorY, defaultSize, defaultSize));
+            } else {
+                engine.add(new Baddie(vectorX, vectorY, defaultSize, defaultSize));
+            }
+
+        }, Config.spawnTimeInMilisseconds, true, -1);
+
+        return enemyTimer;
     }
 }

@@ -12,6 +12,7 @@ export default class Boss extends ex.Actor {
     private explode?: ex.Animation;
     private fireTimer?: ex.Timer;
     private fireAngle: number = Math.random() * Math.PI * 2;
+    private hp: number = Config.bossHp;
     
     constructor(x: number, y: number, width: number, height: number) {
         super({
@@ -36,7 +37,7 @@ export default class Boss extends ex.Actor {
         this.anim.scale = new ex.Vector(8, 8);
         this.addDrawing("default", this.anim);
 
-        this.explode = explosionSpriteSheet.getAnimationForAll(engine, 40);
+        this.explode = explosionSpriteSheet.getAnimationForAll(engine, 80);
         this.explode.scale = new ex.Vector(7, 7);
         this.explode.loop = false;
 
@@ -47,27 +48,32 @@ export default class Boss extends ex.Actor {
                     .moveTo(this.pos.x, this.pos.y, Config.enemySpeed)
                     .repeatForever();
 
-        // Setup firing timer, repeats forever
         let intervalToMakeTimerRepeatForever = -1;
-        this.fireTimer = new ex.Timer(() => { this.fire(engine) }, Config.enemyFireInterval, true, intervalToMakeTimerRepeatForever);
+        this.fireTimer = new ex.Timer(() => { this.fire(engine) }, 
+                                            Config.bossFireIntervalInMilisseconds, 
+                                            true, 
+                                            intervalToMakeTimerRepeatForever);
+
         engine.addTimer(this.fireTimer);
     }
 
     // Fires before excalibur collision resolution
     private onPreCollision(evt: ex.PreCollisionEvent) {
-        // only kill a baddie if it collides with something that isn't a baddie or a baddie bullet
-        if(!ActorUtils.collisionEventCameFromBulletOrBaddie(evt)) {
-            Sounds.explodeSound.play();
-            if (this.explode) {
-                animManager.play(this.explode, this.pos);
-            }
+        if(!ActorUtils.collisionEventCameFromBulletOrBoss(evt)) {
+            this.hp--;
+            if (this.hp === 0) {
+                Sounds.explodeSound.play();
+                if (this.explode) {
+                    animManager.play(this.explode, this.pos);
+                }
 
-            stats.score += 100;
-            if (this.fireTimer) {
-                this.fireTimer.cancel();
-            }
+                stats.score += Config.scoreGainerFromKillingBoss;
 
-            this.kill();
+                if (this.fireTimer) {
+                    this.fireTimer.cancel();
+                }
+                this.kill();
+            } 
         }
     }
 

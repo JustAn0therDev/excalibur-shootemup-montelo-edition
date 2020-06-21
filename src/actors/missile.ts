@@ -18,7 +18,7 @@ export class Missile extends ex.Actor {
     }
     
     onPreCollision(evt: ex.PreCollisionEvent) {
-        if(ActorUtils.collistionEventCameFromBaddie(evt)){
+        if(ActorUtils.collisionEventCameFromBaddie(evt)){
             Sounds.rocketSound.stop();
             Sounds.explodeSound.play();
             this.kill();

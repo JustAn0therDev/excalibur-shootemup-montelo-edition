@@ -10,7 +10,8 @@ const Config = {
    enemyDamage : 1,
    bulletSize: 5,
    spawnTimeInMilisseconds : 3000,
-   totalHp : 1 // Player dies in one hit
+   totalHp : 1, // Player dies in one hit
+   bossHp: 5
 }
 
 export default Config;

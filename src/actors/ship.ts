@@ -51,11 +51,11 @@ export class Ship extends ex.Actor {
 
         // Get animation
         const anim = gameSheet.getAnimationByIndices(engine, [0, 1, 2], 100);
-        anim.scale = new ex.Vector(4, 4);
+        anim.scale = new ex.Vector(3, 3);
         this.addDrawing("default", anim);
 
-        this.explode = explosionSpriteSheet.getAnimationForAll(engine, 40);
-        this.explode.scale = new ex.Vector(3, 3);
+        this.explode = explosionSpriteSheet.getAnimationForAll(engine, 80);
+        this.explode.scale = new ex.Vector(2, 2);
         this.explode.loop = false;
     }
 
@@ -145,4 +145,3 @@ export class Ship extends ex.Actor {
         }
     }
 }
-

@@ -4,12 +4,14 @@ import Config from "../config";
 import Bullet from "./bullet";
 import stats from "../stats";
 import ActorUtils from "../utils/actorUtils";
+
 import { animManager } from "./animation-manager";
 import { Sounds, gameSheet, explosionSpriteSheet } from "../resources";
 
 export default class Boss extends ex.Actor {
     private anim?: ex.Animation;
     private explode?: ex.Animation;
+    private explosionFromDamage?: ex.Animation;
     private fireTimer?: ex.Timer;
     private fireAngle: number = Math.random() * Math.PI * 2;
     private hp: number = Config.bossHp;
@@ -21,10 +23,7 @@ export default class Boss extends ex.Actor {
             height: height,
         });
 
-        // Passive receives collision events but does not participate in resolution
         this.body.collider.type = ex.CollisionType.Passive;
-
-        // Setup listeners
         this.on('precollision', this.onPreCollision);
     }
 
@@ -40,6 +39,11 @@ export default class Boss extends ex.Actor {
         this.explode = explosionSpriteSheet.getAnimationForAll(engine, 80);
         this.explode.scale = new ex.Vector(7, 7);
         this.explode.loop = false;
+
+        this.explosionFromDamage = explosionSpriteSheet.getAnimationForAll(engine, 100);
+        this.explosionFromDamage.scale = new ex.Vector(1, 1);
+        this.explosionFromDamage.loop = false;
+
 
         // Setup patrolling behavior
         this.actions.moveTo(this.pos.x, this.pos.y + 800, Config.enemySpeed)
@@ -73,7 +77,11 @@ export default class Boss extends ex.Actor {
                     this.fireTimer.cancel();
                 }
                 this.kill();
-            } 
+            } else {
+                if (this.explosionFromDamage) {
+                    animManager.play(this.explosionFromDamage, this.pos);
+                }
+            }
         }
     }
 

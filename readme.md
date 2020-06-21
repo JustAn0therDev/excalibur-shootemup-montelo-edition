@@ -1,4 +1,4 @@
-# Excalibur Shoot'em Up Sample
+# Excalibur Shoot'em Up Sample - Montelo Edition
 
 ## Running locally
 

@@ -39,6 +39,12 @@ export default class Game extends ex.Scene {
         .blink(1000, 1000, 400)
         .repeatForever();
 
+        const instructionsLabel = new ex.Label("To play again, refresh your browser!",
+                                                engine.halfDrawWidth - 350, 
+                                                engine.halfDrawHeight + 200)
+        instructionsLabel.color = ex.Color.Green.clone();
+        instructionsLabel.scale = new ex.Vector(4,4);
+
         const baddieTimer: ex.Timer = new ex.Timer(() => {
             let vectorX = Math.random() * 1000;
             let vectorY = -100;
@@ -52,6 +58,7 @@ export default class Game extends ex.Scene {
         engine.on('preupdate', () => {
             if (stats.gameOver) {
                 engine.add(gameOverLabel); 
+                engine.add(instructionsLabel);
                 engine.removeTimer(baddieTimer);
             }
         });

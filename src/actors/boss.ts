@@ -4,6 +4,7 @@ import Config from "../config";
 import Bullet from "./bullet";
 import stats from "../stats";
 import ActorUtils from "../utils/actorUtils";
+import AnimationUtils from '../utils/animationUtils';
 
 import { animManager } from "./animation-manager";
 import { Sounds, gameSheet, explosionSpriteSheet } from "../resources";
@@ -36,14 +37,21 @@ export default class Boss extends ex.Actor {
         this.anim.scale = new ex.Vector(8, 8);
         this.addDrawing("default", this.anim);
 
-        this.explode = explosionSpriteSheet.getAnimationForAll(engine, 80);
-        this.explode.scale = new ex.Vector(7, 7);
-        this.explode.loop = false;
+            let animationSpeed = 80;
+            let vectorSize = 7;
 
-        this.explosionFromDamage = explosionSpriteSheet.getAnimationForAll(engine, 100);
-        this.explosionFromDamage.scale = new ex.Vector(1, 1);
-        this.explosionFromDamage.loop = false;
+            this.explode = AnimationUtils.configureAnimation(animationSpeed, 
+                explosionSpriteSheet, 
+                vectorSize, 
+                engine);
 
+            animationSpeed = 100;
+            vectorSize = 1;
+
+            this.explosionFromDamage = AnimationUtils.configureAnimation(animationSpeed, 
+                explosionSpriteSheet, 
+                vectorSize, 
+                engine);
 
         // Setup patrolling behavior
         this.actions.moveTo(this.pos.x, this.pos.y + 800, Config.enemySpeed)
@@ -71,11 +79,12 @@ export default class Boss extends ex.Actor {
                     animManager.play(this.explode, this.pos);
                 }
 
-                stats.score += Config.scoreGainerFromKillingBoss;
+                stats.score += Config.scoreGainedFromKillingBoss;
 
                 if (this.fireTimer) {
                     this.fireTimer.cancel();
                 }
+
                 this.kill();
             } else {
                 if (this.explosionFromDamage) {

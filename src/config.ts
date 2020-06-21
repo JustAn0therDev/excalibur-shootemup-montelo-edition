@@ -1,4 +1,4 @@
-const Config = {
+export default {
    soundVolume : .01,
    playerBulletVelocity : -600,
    playerSpeed : 700,
@@ -17,5 +17,3 @@ const Config = {
    scoreGainedFromKillingEnemy: 100,
    scoreGainerFromKillingBoss: 300
 }
-
-export default Config;

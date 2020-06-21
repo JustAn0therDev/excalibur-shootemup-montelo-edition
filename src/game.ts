@@ -2,17 +2,13 @@ import * as ex from 'excalibur';
 import { Ship } from './actors/ship';
 
 import stats from './stats';
-import Baddie from './actors/baddie';
-import Boss from './actors/boss';
 import Bullet from './actors/bullet';
 import Config from './config';
-
+import EnemyFactory from './factories/enemyFactory';
 import { animManager } from './actors/animation-manager';
-import { randomIntFromInterval } from './utils/numberUtils';
 
 export default class Game extends ex.Scene {
     public static baddieBullets: Array<Bullet> = new Array<Bullet>();
-    private CHANCES_OF_GENERATING_BOSS = 10;
 
     constructor(engine: ex.Engine) {
         super(engine);
@@ -62,20 +58,10 @@ export default class Game extends ex.Scene {
     }
 
     private generateEnemyTimer(engine: ex.Engine): ex.Timer {
-        const enemyTimer: ex.Timer = new ex.Timer(() => {
-            let vectorX = Math.random() * 1000;
-            let vectorY = -100;
-            let defaultSize = 80;
-            let shouldgenerateBoss: boolean = randomIntFromInterval(1, 100) <= this.CHANCES_OF_GENERATING_BOSS;
-
-            if (shouldgenerateBoss) {
-                engine.add(new Boss(vectorX, vectorY, defaultSize, defaultSize));
-            } else {
-                engine.add(new Baddie(vectorX, vectorY, defaultSize, defaultSize));
-            }
-
-        }, Config.spawnTimeInMilisseconds, true, -1);
-
-        return enemyTimer;
+        let intervalToRepeatForever = -1;
+        return new ex.Timer(() => {
+            let generatedEnemy = EnemyFactory.buildBaddie();
+            engine.add(generatedEnemy);
+        }, Config.spawnTimeInMilisseconds, true, intervalToRepeatForever);
     }
 }

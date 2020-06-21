@@ -1,6 +1,6 @@
 import * as ex from "excalibur";
-import { Sounds, gameSheet } from "../resources";
 import ActorUtils from "../utils/actorUtils";
+import { gameSheet } from "../resources";
 
 export class Missile extends ex.Actor {
     constructor() {
@@ -12,15 +12,12 @@ export class Missile extends ex.Actor {
 
         this.on('precollision', this.onPreCollision);
         this.on('exitviewport', () => {
-            Sounds.rocketSound.stop();
             this.kill();
         });
     }
     
     onPreCollision(evt: ex.PreCollisionEvent) {
         if(ActorUtils.collisionEventCameFromBaddie(evt)){
-            Sounds.rocketSound.stop();
-            Sounds.explodeSound.play();
             this.kill();
          }
     }

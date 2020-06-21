@@ -4,10 +4,10 @@ import Config from "../config";
 import Bullet from "./bullet";
 import stats from "../stats";
 import ActorUtils from "../utils/actorUtils";
-import AnimationUtils from '../utils/animationUtils';
+import AnimationFactory from '../factories/animationFactory';
 
 import { animManager } from "./animation-manager";
-import { Sounds, gameSheet, explosionSpriteSheet } from "../resources";
+import { gameSheet, explosionSpriteSheet } from "../resources";
 
 export default class Boss extends ex.Actor {
     private anim?: ex.Animation;
@@ -40,7 +40,7 @@ export default class Boss extends ex.Actor {
             let animationSpeed = 80;
             let vectorSize = 7;
 
-            this.explode = AnimationUtils.configureAnimation(animationSpeed, 
+            this.explode = AnimationFactory.buildAnimation(animationSpeed, 
                 explosionSpriteSheet, 
                 vectorSize, 
                 engine);
@@ -48,7 +48,7 @@ export default class Boss extends ex.Actor {
             animationSpeed = 100;
             vectorSize = 1;
 
-            this.explosionFromDamage = AnimationUtils.configureAnimation(animationSpeed, 
+            this.explosionFromDamage = AnimationFactory.buildAnimation(animationSpeed, 
                 explosionSpriteSheet, 
                 vectorSize, 
                 engine);
@@ -74,7 +74,6 @@ export default class Boss extends ex.Actor {
         if(!ActorUtils.collisionEventCameFromBulletOrBoss(evt)) {
             this.hp--;
             if (this.hp === 0) {
-                Sounds.explodeSound.play();
                 if (this.explode) {
                     animManager.play(this.explode, this.pos);
                 }

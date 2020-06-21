@@ -4,10 +4,10 @@ import Config from "../config";
 import Bullet from "./bullet";
 import stats from "../stats";
 import ActorUtils from "../utils/actorUtils";
-import AnimationUtils from '../utils/animationUtils';
+import AnimationFactory from '../factories/animationFactory';
 
 import { animManager } from "./animation-manager";
-import { Sounds, gameSheet, explosionSpriteSheet } from "../resources";
+import { gameSheet, explosionSpriteSheet } from "../resources";
 
 export default class Baddie extends ex.Actor {
     private anim?: ex.Animation;
@@ -41,11 +41,11 @@ export default class Baddie extends ex.Actor {
 
             let animationSpeed = 40;
             let vectorSize = 3;
-            this.explode = AnimationUtils.configureAnimation(animationSpeed, 
+            this.explode = AnimationFactory.buildAnimation(animationSpeed, 
             explosionSpriteSheet, 
             vectorSize, 
             engine);
-
+            
         // Setup patrolling behavior
         this.actions.moveTo(this.pos.x, this.pos.y + 800, Config.enemySpeed)
                     .moveTo(this.pos.x + 800, this.pos.y, Config.enemySpeed)
@@ -66,7 +66,6 @@ export default class Baddie extends ex.Actor {
         if(!ActorUtils.collisionEventCameFromBulletOrBaddie(evt)) {
             this.hp--;
             if (this.hp <= 0) {
-                Sounds.explodeSound.play();
                 if (this.explode) {
                     animManager.play(this.explode, this.pos);
                 }

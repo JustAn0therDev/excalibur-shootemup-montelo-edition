@@ -1,11 +1,13 @@
 import * as ex from "excalibur";
-import { gameSheet, Sounds, explosionSpriteSheet } from "../resources";
 import Config from "../config";
 import Bullet from "./bullet";
 import ActorUtils from "../utils/actorUtils";
-import { animManager } from "./animation-manager";
+import AnimationFactory from '../factories/animationFactory';
 import stats from "../stats";
+
+import { animManager } from "./animation-manager";
 import { FireFunction } from '../types/FireFunction';
+import { gameSheet, explosionSpriteSheet } from "../resources";
 
 const throttle = function(this: any, func: FireFunction, throttle: number): FireFunction {
     var lastTime = Date.now();
@@ -54,18 +56,24 @@ export class Ship extends ex.Actor {
         anim.scale = new ex.Vector(3, 3);
         this.addDrawing("default", anim);
 
-        this.explode = explosionSpriteSheet.getAnimationForAll(engine, 80);
-        this.explode.scale = new ex.Vector(2, 2);
-        this.explode.loop = false;
+        let animationSpeed = 80;
+        let vectorSize = 2;
+
+        this.explode = AnimationFactory.buildAnimation(animationSpeed,
+            explosionSpriteSheet,
+            vectorSize,
+            engine);
     }
 
     onPreCollision(evt: ex.PreCollisionEvent) {
         if(ActorUtils.collisionEventCameFromBulletOrBaddie(evt)){
-            Sounds.hitSound.play();
             this.actions.blink(300, 300, 3);
             stats.hp -= Config.enemyDamage;
             if (stats.hp <= 0) {
                 stats.gameOver = true;
+                if (this.explode) {
+                    animManager.play(this.explode, this.pos);
+                }
                 this.kill();
                 this.stopRegisteringFireInput();
             }
@@ -73,13 +81,7 @@ export class Ship extends ex.Actor {
     }
 
     onPostUpdate(engine: ex.Engine, delta: number) {
-        if (stats.hp <= 0 && this.explode) {
-            animManager.play(this.explode, this.pos);
-            Sounds.explodeSound.play();
-            this.kill();
-        }
-
-        // Keep player in the viewport
+       // Keep player in the viewport
        if(this.pos.x < 0) this.pos.x = 0;
        if(this.pos.y < 0) this.pos.y = 0;
        if(this.pos.x > engine.drawWidth - this.width) this.pos.x = (engine.drawWidth - this.width);
@@ -93,7 +95,6 @@ export class Ship extends ex.Actor {
     private fire = (engine: ex.Engine) => {
         let bullet = new Bullet(this.pos.x + (this.flipBarrel?-40:40), this.pos.y - 20, 0, Config.playerBulletVelocity, this);
         this.flipBarrel = !this.flipBarrel;
-        Sounds.laserSound.play();
         engine.add(bullet);
     }
 

@@ -1,6 +1,5 @@
 import * as ex from 'excalibur';
-import Config from './config';
-import { Sounds, loader } from './resources';
+import { loader } from './resources';
 import Game from './game';
 
 const engine: ex.Engine = new ex.Engine({
@@ -33,10 +32,4 @@ engine.input.keyboard.on('press', (evt: ex.Input.KeyEvent) => {
     }
 })
 
-engine.start(loader).then(() => {
-   Sounds.laserSound.volume = Config.soundVolume;
-   Sounds.explodeSound.volume = Config.soundVolume;
-   Sounds.enemyFireSound.volume = Config.soundVolume;
-   Sounds.powerUp.volume = Config.soundVolume;
-   Sounds.rocketSound.volume = Config.soundVolume;
-});
+engine.start(loader);

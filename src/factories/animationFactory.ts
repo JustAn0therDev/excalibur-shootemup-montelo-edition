@@ -1,7 +1,7 @@
 import * as ex from 'excalibur';
 
-export default class AnimationUtils { 
-    public static configureAnimation(animationSpeed: number,
+export default class AnimationFactory { 
+    public static buildAnimation(animationSpeed: number,
                                 spriteSheet: ex.SpriteSheet, 
                                 vectorSize: number, 
                                 engine: ex.Engine,

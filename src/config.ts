@@ -10,7 +10,7 @@ export default {
    bossFireIntervalInMilisseconds: 200,
    enemyDamage : 1,
    bulletSize: 5,
-   spawnTimeInMilisseconds : 1500,
+   spawnTimeInMilisseconds : 2000,
    totalHp : 1, 
    baddieHp: 3,
    bossHp: 15,

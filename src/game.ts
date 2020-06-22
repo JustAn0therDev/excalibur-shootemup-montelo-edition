@@ -27,21 +27,12 @@ export default class Game extends ex.Scene {
         });
         engine.add(scoreLabel);
 
-        const gameOverLabel = new ex.Label("Game Over",
-                                            engine.halfDrawWidth - 250,
-                                            engine.halfDrawHeight);
+        const gameOverLabel = new ex.Label("Game Over - To play again, refresh your browser!",
+                                            engine.halfDrawWidth - 510,
+                                            engine.halfDrawHeight, 'roboto');
 
         gameOverLabel.color = ex.Color.Green.clone();
-        gameOverLabel.scale = new ex.Vector(8,8);
-        gameOverLabel.actions
-        .blink(1000, 1000, 400)
-        .repeatForever();
-
-        const instructionsLabel = new ex.Label("To play again, refresh your browser!",
-                                                engine.halfDrawWidth - 350, 
-                                                engine.halfDrawHeight + 200)
-        instructionsLabel.color = ex.Color.Green.clone();
-        instructionsLabel.scale = new ex.Vector(4,4);
+        gameOverLabel.scale = new ex.Vector(5,5);
 
         const enemyTimer = this.generateEnemyTimer(engine);
 
@@ -50,7 +41,6 @@ export default class Game extends ex.Scene {
         engine.on('preupdate', () => {
             if (stats.gameOver) {
                 engine.add(gameOverLabel); 
-                engine.add(instructionsLabel);
                 engine.removeTimer(enemyTimer);
             }
         });

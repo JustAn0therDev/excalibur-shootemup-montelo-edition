@@ -5,11 +5,11 @@ export default class AnimationFactory {
                                 spriteSheet: ex.SpriteSheet, 
                                 vectorSize: number, 
                                 engine: ex.Engine,
-                                shouldLoopAnimation: boolean = false) : ex.Animation 
+                                shouldLoopAnimation?: boolean) : ex.Animation 
     {
         let animationObjectToReturn: ex.Animation = spriteSheet.getAnimationForAll(engine, animationSpeed);
         animationObjectToReturn.scale = new ex.Vector(vectorSize, vectorSize);
-        animationObjectToReturn.loop = shouldLoopAnimation;
+        animationObjectToReturn.loop = shouldLoopAnimation ? shouldLoopAnimation : false;
         return animationObjectToReturn;
     }
 }

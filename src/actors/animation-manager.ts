@@ -1,12 +1,8 @@
 import * as ex from "excalibur";
+import AnimationNode from '../interfaces/animationNode';
 
-interface AnimationNode {
-    pos: ex.Vector,
-    anim: ex.Animation
-}
-
-export class AnimationManager extends ex.Actor {
-    private animations: AnimationNode[] = [];
+class AnimationManager extends ex.Actor {
+    private animations: Array<AnimationNode> = [];
     constructor() {
         super({
             pos: ex.Vector.Zero,
@@ -36,7 +32,4 @@ export class AnimationManager extends ex.Actor {
     }
 }
 
-
-const animManager = new AnimationManager();
-
-export { animManager };
+export default new AnimationManager();

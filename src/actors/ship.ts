@@ -4,8 +4,7 @@ import Bullet from "./bullet";
 import ActorUtils from "../utils/actorUtils";
 import AnimationFactory from '../factories/animationFactory';
 import stats from "../stats";
-
-import { animManager } from "./animation-manager";
+import animManager from "./animation-manager";
 import { FireFunction } from '../types/FireFunction';
 import { gameSheet, explosionSpriteSheet } from "../resources";
 
@@ -22,7 +21,7 @@ const throttle = function(this: any, func: FireFunction, throttle: number): Fire
     }
  }
 
-export class Ship extends ex.Actor {
+export default class Ship extends ex.Actor {
     private flipBarrel = false;
     private throttleFire?: FireFunction;
     private explode?: ex.Animation;

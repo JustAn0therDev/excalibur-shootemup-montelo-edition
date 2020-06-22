@@ -5,8 +5,7 @@ import Bullet from "./bullet";
 import stats from "../stats";
 import ActorUtils from "../utils/actorUtils";
 import AnimationFactory from '../factories/animationFactory';
-
-import { animManager } from "./animation-manager";
+import animManager from "./animation-manager";
 import { gameSheet, explosionSpriteSheet } from "../resources";
 
 export default class Boss extends ex.Actor {

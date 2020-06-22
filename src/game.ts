@@ -1,14 +1,13 @@
 import * as ex from 'excalibur';
-import { Ship } from './actors/ship';
-
 import stats from './stats';
 import Bullet from './actors/bullet';
 import Config from './config';
 import EnemyFactory from './factories/enemyFactory';
-import { animManager } from './actors/animation-manager';
+import animManager from './actors/animation-manager';
+import Ship from './actors/ship';
 
 export default class Game extends ex.Scene {
-     static baddieBullets: Array<Bullet> = new Array<Bullet>();
+    static baddieBullets: Array<Bullet> = new Array<Bullet>();
 
     constructor(engine: ex.Engine) {
         super(engine);
@@ -58,10 +57,11 @@ export default class Game extends ex.Scene {
     }
 
     private generateEnemyTimer(engine: ex.Engine): ex.Timer {
-        let intervalToRepeatForever = -1;
+        let intervalToMakeTimerRepeatForever = -1;
+
         return new ex.Timer(() => {
             let generatedEnemy = EnemyFactory.buildBaddie();
             engine.add(generatedEnemy);
-        }, Config.spawnTimeInMilisseconds, true, intervalToRepeatForever);
+        }, Config.spawnTimeInMilisseconds, true, intervalToMakeTimerRepeatForever);
     }
 }

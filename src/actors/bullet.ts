@@ -5,7 +5,7 @@ import Config from "../config";
 import { gameSheet } from "../resources";
 
 export default class Bullet extends ex.Actor {
-    public owner?: ex.Actor;
+     owner?: ex.Actor;
     constructor(x: number, y: number, dx: number, dy: number, owner?: ex.Actor) {
         super({
             pos: new ex.Vector(x, y),

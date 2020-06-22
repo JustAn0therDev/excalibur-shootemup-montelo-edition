@@ -1,10 +1,10 @@
 import Config from "./config";
 
 class Stats {
-    public hp: number = Config.totalHp;
-    public gameOver: boolean = false;
-    public score: number = 0;
-    public reset() {
+    hp: number = Config.totalHp;
+    gameOver: boolean = false;
+    score: number = 0;
+    reset() {
         this.hp = Config.totalHp;
     }
 }

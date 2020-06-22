@@ -8,7 +8,7 @@ import EnemyFactory from './factories/enemyFactory';
 import { animManager } from './actors/animation-manager';
 
 export default class Game extends ex.Scene {
-    public static baddieBullets: Array<Bullet> = new Array<Bullet>();
+     static baddieBullets: Array<Bullet> = new Array<Bullet>();
 
     constructor(engine: ex.Engine) {
         super(engine);

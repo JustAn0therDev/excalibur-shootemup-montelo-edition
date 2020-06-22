@@ -3,7 +3,7 @@ import Boss from '../actors/boss';
 import Baddie from '../actors/baddie';
 
 export default class EnemyFactory {
-    public static buildBaddie() {
+     static buildBaddie() {
         let chancesOfGeneringBoss = 10;
         let vectorX = Math.random() * 1000;
         let vectorY = -100;

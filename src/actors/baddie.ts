@@ -12,6 +12,7 @@ import { gameSheet, explosionSpriteSheet } from "../resources";
 export default class Baddie extends ex.Actor {
     private anim?: ex.Animation;
     private explode?: ex.Animation;
+    private explosionFromDamage?: ex.Animation;
     private fireTimer?: ex.Timer;
     private fireAngle: number = Math.random() * Math.PI * 2;
     private hp: number = Config.baddieHp;
@@ -40,11 +41,17 @@ export default class Baddie extends ex.Actor {
         this.addDrawing("default", this.anim);
 
             let animationSpeed = 40;
-            let vectorSize = 3;
+            let vectorSize = 3, smallExplosionVectorSize = 1;
+
             this.explode = AnimationFactory.buildAnimation(animationSpeed, 
             explosionSpriteSheet, 
             vectorSize, 
             engine);
+            
+            this.explosionFromDamage = AnimationFactory.buildAnimation(animationSpeed, 
+                explosionSpriteSheet, 
+                smallExplosionVectorSize, 
+                engine);
             
         // Setup patrolling behavior
         this.actions.moveTo(this.pos.x, this.pos.y + 800, Config.enemySpeed)
@@ -76,6 +83,10 @@ export default class Baddie extends ex.Actor {
                 }
 
                 this.kill();
+            } else {
+                if (this.explosionFromDamage) {
+                    animManager.play(this.explosionFromDamage, this.pos);
+                }
             }
         }
     }

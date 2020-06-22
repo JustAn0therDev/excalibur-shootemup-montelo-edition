@@ -37,8 +37,7 @@ export default class Boss extends ex.Actor {
         this.anim.scale = new ex.Vector(8, 8);
         this.addDrawing("default", this.anim);
 
-            let animationSpeed = 80;
-            let vectorSize = 7;
+            let animationSpeed = 80, vectorSize = 7;
 
             this.explode = AnimationFactory.buildAnimation(animationSpeed, 
                 explosionSpriteSheet, 

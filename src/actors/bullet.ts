@@ -30,7 +30,7 @@ export default class Bullet extends ex.Actor {
     private onPreCollision(evt: ex.PreCollisionEvent) {
         if (!(evt.other instanceof Bullet) && 
             evt.other !== this.owner) {
-                this.killAndRemoveFromBullets();
+            this.killAndRemoveFromBullets();
         }
     }
 

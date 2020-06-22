@@ -79,7 +79,7 @@ export default class Ship extends ex.Actor {
          }
     }
 
-    onPostUpdate(engine: ex.Engine, delta: number) {
+    onPostUpdate(engine: ex.Engine) {
        // Keep player in the viewport
        if(this.pos.x < 0) this.pos.x = 0;
        if(this.pos.y < 0) this.pos.y = 0;
@@ -139,9 +139,7 @@ export default class Ship extends ex.Actor {
         }
 
         if (dir.x !== 0 || dir.y !== 0) {
-            this.vel = dir
-            .normalize()
-            .scale(Config.playerSpeed);
+            this.vel = dir.normalize().scale(Config.playerSpeed);
         }
     }
 }

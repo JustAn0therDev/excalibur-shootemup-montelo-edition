@@ -17,8 +17,9 @@ const gameSheet = new ex.SpriteSheet(Images.sheet, 10.0, 10.0, 32.0, 32.0);
 
 const loader = new ex.Loader();
 const allResources = {...Images};
-for (const res in allResources) {
-    loader.addResource(allResources[res]);
+
+for (const resource in allResources) {
+    loader.addResource(allResources[resource]);
 }
 
 export { Images, loader, explosionSpriteSheet, gameSheet };

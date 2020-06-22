@@ -91,7 +91,7 @@ export default class Baddie extends ex.Actor {
     }
 
     private fire(engine: ex.Engine) {
-        this.fireAngle += Math.PI/20;
+        this.fireAngle += Math.PI / 20;
         const bulletVelocity = new ex.Vector(
             Config.enemyBulletVelocity * Math.cos(this.fireAngle),
             Config.enemyBulletVelocity * Math.sin(this.fireAngle));

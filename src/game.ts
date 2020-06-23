@@ -27,6 +27,7 @@ export default class Game extends ex.Scene {
         scoreLabel.on('preupdate', function(this: ex.Label, evt){
             this.text = "Score: " + stats.score;
         });
+        
         engine.add(scoreLabel);
 
         const gameOverLabel = new ex.Label("Game Over - To play again, refresh your browser!",
@@ -55,5 +56,13 @@ export default class Game extends ex.Scene {
             let generatedEnemy: Baddie | Boss = EnemyFactory.buildBaddie();
             engine.add(generatedEnemy);
         }, Config.spawnTimeInMilisseconds, true, intervalToMakeTimerRepeatForever);
+    }
+
+    static pushBulletInBulletArray(bullet: Bullet) {
+        Game.baddieBullets.push(bullet);
+    }
+
+    static removeBulletFromBulletArray(bullet: Bullet) {
+        ex.Util.removeItemFromArray(bullet, Game.baddieBullets);
     }
 }

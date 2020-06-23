@@ -5,7 +5,7 @@ import Config from "../config";
 import { gameSheet } from "../resources";
 
 export default class Bullet extends ex.Actor {
-     owner?: ex.Actor;
+    owner?: ex.Actor;
     constructor(x: number, y: number, dx: number, dy: number, owner?: ex.Actor) {
         super({
             pos: new ex.Vector(x, y),
@@ -19,7 +19,9 @@ export default class Bullet extends ex.Actor {
     
     onInitialize(engine: ex.Engine) {
         this.on('precollision', this.onPreCollision);
-        // Clean up on exit viewport
+
+        // If the bullet exists the viewport,
+        // remove it from the bullet array in the Game class.
         this.on('exitviewport', () => this.killAndRemoveFromBullets());
 
         const anim = gameSheet.getAnimationByIndices(engine, [3, 4, 5, 6, 7, 8, 7, 6, 5, 4], 100);

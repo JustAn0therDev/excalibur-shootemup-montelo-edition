@@ -13,26 +13,27 @@ var throttle = function(func, throttle){
 }
 
 var fireBullet = function(x, y, velx, vely, color){
-   var b = new Bullet(x, y, 5, 5, color || Color.Red);
-   b.dx = velx;
-   b.dy = vely;
-   game.addChild(b);
-   return b;
+   var bullet = new Bullet(x, y, 5, 5, color || Color.Red);
+   bullet.dx = velx;
+   bullet.dy = vely;
+   game.addChild(bullet);
+   return bullet;
 };
 
 var fireMissile = function(x, y){
-   var m = new Missile(x, y);
-   m.dy = Config.missileSpeed;
-   game.addChild(m);
-   return m;
+   var missile = new Missile(x, y);
+   missile.dy = Config.missileSpeed;
+   game.addChild(missile);
+   return missile;
 };
 
 var flipBarrel = false;
-var flipFire = throttle(function(){
-   var b = fireBullet.apply(this, Array.prototype.slice.call(arguments,0));
+
+var flipFire = throttle(function() {
+   var bulletFunction = fireBullet.apply(this, Array.prototype.slice.call(arguments,0));
    flipBarrel = !flipBarrel;
    laserSound.play();
-   return b;
+   return bulletFunction;
 }, Config.playerFireThrottle);
 
 var getEnemyBulletAnim = function(){
@@ -43,12 +44,12 @@ var getEnemyBulletAnim = function(){
 };
 
 var enemyFire = function(x, y, velx, vely){
-   var b = new Bullet(x, y, 5, 5);
-   b.color = Color.White;
-   b.dx = velx;
-   b.dy = vely;
-   b.addDrawing("default", getEnemyBulletAnim());
-   b.setCenterDrawing(true);
-   game.addChild(b);
-   return b;
+   var bullet = new Bullet(x, y, 5, 5);
+   bullet.color = Color.White;
+   bullet.dx = velx;
+   bullet.dy = vely;
+   bullet.addDrawing("default", getEnemyBulletAnim());
+   bullet.setCenterDrawing(true);
+   game.addChild(bullet);
+   return bullet;
 };

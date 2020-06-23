@@ -7,6 +7,7 @@ const engine: ex.Engine = new ex.Engine({
     width: 1366,
     height: 768
 });
+
 engine.backgroundColor = ex.Color.Black;
 engine.setAntialiasing(false);
 

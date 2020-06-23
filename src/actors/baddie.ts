@@ -97,7 +97,7 @@ export default class Baddie extends ex.Actor {
             Config.enemyBulletVelocity * Math.sin(this.fireAngle));
 
         const bullet = new Bullet(this.pos.x, this.pos.y, bulletVelocity.x, bulletVelocity.y, this);
-        Game.baddieBullets.push(bullet);
+        Game.pushBulletInBulletArray(bullet);
         engine.add(bullet);
     }
 }

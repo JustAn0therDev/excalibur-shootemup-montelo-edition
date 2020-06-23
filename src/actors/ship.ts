@@ -14,12 +14,12 @@ const throttle = function(this: any, func: FireFunction, throttle: number): Fire
     return (engine: ex.Engine) => {
        var currentTime = Date.now();
        if (currentTime - lastTime > throttle) {
-          var val = func.apply(this, [engine]);
+          var callableFunction = func.apply(this, [engine]);
           lastTime = currentTime;
-          return val;
-       }
+          return callableFunction;
+        }
     }
- }
+}
 
 export default class Ship extends ex.Actor {
     private flipBarrel = false;
@@ -34,7 +34,7 @@ export default class Ship extends ex.Actor {
         this.body.collider.type = ex.CollisionType.Passive;
     }
 
-    onInitialize(engine: ex.Engine) {
+    onInitialize(engine: ex.Engine): void {
         this.throttleFire = throttle(this.fire, Config.playerFireThrottle);
         this.on('precollision', this.onPreCollision);
 
@@ -64,7 +64,7 @@ export default class Ship extends ex.Actor {
             engine);
     }
 
-    onPreCollision(evt: ex.PreCollisionEvent) {
+    onPreCollision(evt: ex.PreCollisionEvent): void {
         if(ActorUtils.collisionEventCameFromBulletOrBaddie(evt)){
             this.actions.blink(300, 300, 3);
             stats.hp -= Config.enemyDamage;
@@ -79,7 +79,7 @@ export default class Ship extends ex.Actor {
          }
     }
 
-    onPostUpdate(engine: ex.Engine) {
+    onPostUpdate(engine: ex.Engine): void {
        // Keep player in the viewport
        if(this.pos.x < 0) this.pos.x = 0;
        if(this.pos.y < 0) this.pos.y = 0;
@@ -87,17 +87,17 @@ export default class Ship extends ex.Actor {
        if(this.pos.y > engine.drawHeight - this.height) this.pos.y = (engine.drawHeight - this.height);
     }
 
-    private stopRegisteringFireInput = () => {
+    private stopRegisteringFireInput(): void {
         this.throttleFire = undefined;
     }
 
-    private fire = (engine: ex.Engine) => {
+    private fire = (engine: ex.Engine): void => {
         let bullet = new Bullet(this.pos.x + (this.flipBarrel?-40:40), this.pos.y - 20, 0, Config.playerBulletVelocity, this);
         this.flipBarrel = !this.flipBarrel;
         engine.add(bullet);
     }
 
-    handlePointerEvent = (engine: ex.Engine, evt: ex.Input.PointerDownEvent) => {
+    handlePointerEvent = (engine: ex.Engine, evt: ex.Input.PointerDownEvent): void => {
 
         let dir = evt.worldPos.sub(this.pos);
         let distance = dir.magnitude();
@@ -108,7 +108,7 @@ export default class Ship extends ex.Actor {
         }
     }
 
-    handleKeyEvent = (engine: ex.Engine, evt: ex.Input.KeyEvent) => {
+    handleKeyEvent = (engine: ex.Engine, evt: ex.Input.KeyEvent): void => {
         let dir = ex.Vector.Zero.clone();
 
         if (evt.key === ex.Input.Keys.Space) {

@@ -17,7 +17,7 @@ export default class Bullet extends ex.Actor {
         this.owner = owner;
     }
     
-    onInitialize(engine: ex.Engine) {
+    onInitialize(engine: ex.Engine): void {
         this.on('precollision', this.onPreCollision);
 
         // If the bullet exists the viewport,
@@ -29,14 +29,14 @@ export default class Bullet extends ex.Actor {
         this.addDrawing('default', anim);
     }
 
-    private onPreCollision(evt: ex.PreCollisionEvent) {
+    private onPreCollision(evt: ex.PreCollisionEvent): void {
         if (!(evt.other instanceof Bullet) && 
             evt.other !== this.owner) {
             this.killAndRemoveFromBullets();
         }
     }
 
-    private killAndRemoveFromBullets() {
+    private killAndRemoveFromBullets(): void {
         this.kill();
         ex.Util.removeItemFromArray(this, Game.baddieBullets);
     }

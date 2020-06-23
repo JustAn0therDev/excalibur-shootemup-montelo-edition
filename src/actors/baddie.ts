@@ -80,8 +80,9 @@ export default class Baddie extends ex.Actor {
                 if (this.fireTimer) {
                     this.fireTimer.cancel();
                 }
-
                 this.kill();
+
+                Game.removeEnemyFromEnemiesOnScreenCounter();
             } else {
                 if (this.explosionFromDamage) {
                     animManager.play(this.explosionFromDamage, this.pos);

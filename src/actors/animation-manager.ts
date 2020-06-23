@@ -2,7 +2,7 @@ import * as ex from "excalibur";
 import AnimationNode from '../interfaces/animationNode';
 
 class AnimationManager extends ex.Actor {
-    private animations: Array<AnimationNode> = [];
+    private animationNodes: Array<AnimationNode> = new Array<AnimationNode>();
     constructor() {
         super({
             pos: ex.Vector.Zero,
@@ -13,21 +13,26 @@ class AnimationManager extends ex.Actor {
         this.traits.length = 0;
     }
 
-    play(animation: ex.Animation, pos: ex.Vector) {
-        this.animations.push({
+    play(animation: ex.Animation, pos: ex.Vector): void {
+        this.animationNodes.push({
             anim: animation,
             pos: pos.clone()
         });
     }
 
-    onPostUpdate() {
-        this.animations = this.animations.filter(a => !a.anim.isDone());
+    onPostUpdate(): void {
+        this.animationNodes = this.animationNodes
+        .filter(animationNode => !animationNode.anim.isDone());
     }
 
     // PostDraw gives the rendering context and the time between frames
-    onPostDraw(ctx: CanvasRenderingContext2D/*, delta: number */) {
-        for (let node of this.animations) {
-            node.anim.draw(ctx, node.pos.x - node.anim.drawWidth / 2, node.pos.y -node.anim.drawHeight / 2);
+    onPostDraw(ctx: CanvasRenderingContext2D): void {
+        for (let animationNode of this.animationNodes) {
+            animationNode.anim.draw(
+                ctx, 
+                animationNode.pos.x - animationNode.anim.drawWidth / 2, 
+                animationNode.pos.y - animationNode.anim.drawHeight / 2
+            );
         }
     }
 }

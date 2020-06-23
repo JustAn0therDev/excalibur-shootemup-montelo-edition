@@ -16,13 +16,13 @@ export class Missile extends ex.Actor {
         });
     }
     
-    onPreCollision(evt: ex.PreCollisionEvent) {
+    onPreCollision(evt: ex.PreCollisionEvent): void {
         if(!ActorUtils.collisionEventCameFromBaddie(evt)) {
             this.kill();
          }
     }
 
-    onInitialize(engine: ex.Engine) {
+    onInitialize(engine: ex.Engine): void {
         const animation = gameSheet.getAnimationByIndices(engine, [13, 14, 15], 50);
         animation.scale = new ex.Vector(3, 3);
     }

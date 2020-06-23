@@ -1,5 +1,5 @@
 export default {
-   playerBulletVelocity: -300,
+   playerBulletVelocity: -650,
    playerSpeed: 700,
    playerFireThrottle: 50,
    missileSpeed: -400,

@@ -4,7 +4,7 @@ class Stats {
     hp: number = Config.totalHp;
     gameOver: boolean = false;
     score: number = 0;
-    reset() {
+    reset(): void {
         this.hp = Config.totalHp;
     }
 }

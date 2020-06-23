@@ -14,10 +14,9 @@ const Images: { [key: string]: ex.Texture } = {
 
 const explosionSpriteSheet = new ex.SpriteSheet(Images.explosion, 5, 5, 45, 45);
 const gameSheet = new ex.SpriteSheet(Images.sheet, 10.0, 10.0, 32.0, 32.0);
-
 const loader = new ex.Loader();
-const allResources = {...Images};
 
+const allResources = {...Images};
 for (const resource in allResources) {
     loader.addResource(allResources[resource]);
 }

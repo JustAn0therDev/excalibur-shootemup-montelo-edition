@@ -10,7 +10,7 @@ export default class EnemyFactory {
             let vectorX = Math.random() * 1000;
             let vectorY = -100;
             let defaultSize = 80;
-            if (EnemyFactory.shouldGenerateBoss(chancesOfGeneringBoss)) {
+            if (this.shouldGenerateBoss(chancesOfGeneringBoss)) {
                 return new Boss(vectorX, vectorY, defaultSize, defaultSize);
             } else {
                 return new Baddie(vectorX, vectorY, defaultSize, defaultSize);
@@ -19,7 +19,7 @@ export default class EnemyFactory {
         return undefined;
     }
 
-    static shouldGenerateBoss(chancesOfGeneratingBoss: number): boolean {
+    private static shouldGenerateBoss(chancesOfGeneratingBoss: number): boolean {
         return randomIntFromInterval(0, 100) < chancesOfGeneratingBoss;
     }
 }

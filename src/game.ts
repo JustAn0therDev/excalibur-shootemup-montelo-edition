@@ -69,7 +69,7 @@ export default class Game extends ex.Scene {
     }
 
     static canRenderAnotherEnemyOnScreen(): boolean {
-        return Game._enemiesOnScreenCounter < 5; 
+        return Game._enemiesOnScreenCounter < 5;
     }
 
     static removeEnemyFromEnemiesOnScreenCounter(): void {

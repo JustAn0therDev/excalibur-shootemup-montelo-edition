@@ -1,5 +1,5 @@
 // utilities 
-var throttle = function(func, throttle){
+var throttle = function(func, throttle) {
    var lastTime = Date.now();
    var throttle = throttle;
    return function(){
@@ -12,7 +12,7 @@ var throttle = function(func, throttle){
    }
 }
 
-var fireBullet = function(x, y, velx, vely, color){
+var fireBullet = function(x, y, velx, vely, color) {
    var bullet = new Bullet(x, y, 5, 5, color || Color.Red);
    bullet.dx = velx;
    bullet.dy = vely;
@@ -20,7 +20,7 @@ var fireBullet = function(x, y, velx, vely, color){
    return bullet;
 };
 
-var fireMissile = function(x, y){
+var fireMissile = function(x, y) {
    var missile = new Missile(x, y);
    missile.dy = Config.missileSpeed;
    game.addChild(missile);

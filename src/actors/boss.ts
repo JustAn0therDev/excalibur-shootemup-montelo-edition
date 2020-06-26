@@ -28,7 +28,7 @@ export default class Boss extends ex.Actor {
     }
 
     // OnInitialize is called before the 1st actor update
-    onInitialize(engine: ex.Engine) {
+    onInitialize(engine: ex.Engine): void {
         // Initialize actor
 
         // Setup visuals
@@ -68,7 +68,7 @@ export default class Boss extends ex.Actor {
     }
 
     // Fires before excalibur collision resolution
-    private onPreCollision(evt: ex.PreCollisionEvent) {
+    private onPreCollision(evt: ex.PreCollisionEvent): void {
         if(!ActorUtils.collisionEventCameFromBulletOrBoss(evt)) {
             this.hp--;
             if (this.hp === 0) {
@@ -92,7 +92,7 @@ export default class Boss extends ex.Actor {
         }
     }
 
-    private fire(engine: ex.Engine) {
+    private fire(engine: ex.Engine): void {
         this.fireAngle += Math.PI/20;
         const bulletVelocity = new ex.Vector(
             Config.enemyBulletVelocity * Math.cos(this.fireAngle),

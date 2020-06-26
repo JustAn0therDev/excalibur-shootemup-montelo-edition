@@ -14,5 +14,5 @@ export default {
    baddieHp: 3,
    bossHp: 15,
    scoreGainedFromKillingEnemy: 100,
-   scoreGainedFromKillingBoss: 300
+   scoreGainedFromKillingBoss: 500
 }

@@ -1,5 +1,5 @@
 export default {
-   playerBulletVelocity: -650,
+   playerBulletVelocity: -475,
    playerSpeed: 700,
    playerFireThrottle: 50,
    missileSpeed: -400,
@@ -15,5 +15,6 @@ export default {
    bossHp: 15,
    scoreGainedFromKillingEnemy: 100,
    scoreGainedFromKillingBoss: 500,
+   chancesOfGeneratingBoss: 10,
    limitOfEnemiesOnScreen: 3
 }

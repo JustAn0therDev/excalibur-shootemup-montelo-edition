@@ -50,7 +50,7 @@ export default class Game extends ex.Scene {
     }
 
     private generateEnemyTimer(engine: ex.Engine): ex.Timer {
-        let intervalToMakeTimerRepeatForever = -1;
+        const intervalToMakeTimerRepeatForever = -1;
         return new ex.Timer(() => {
             const generatedEnemy: Baddie | Boss | undefined = EnemyFactory.buildBaddie();
             if (generatedEnemy) {

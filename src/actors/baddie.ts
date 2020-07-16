@@ -3,7 +3,7 @@ import Game from '../game';
 import Config from "../config";
 import Bullet from "./bullet";
 import stats from "../stats";
-import ActorUtils from "../utils/actorUtils";
+import { collisionEventCameFromBulletOrBaddie } from "../utils/actorUtils";
 import AnimationFactory from '../factories/animationFactory';
 import animManager from "./animation-manager";
 import { gameSheet, explosionSpriteSheet } from "../resources";
@@ -69,20 +69,21 @@ export default class Baddie extends ex.Actor {
 
     // Fires before excalibur collision resolution
     private onPreCollision(evt: ex.PreCollisionEvent): void {
-        if(!ActorUtils.collisionEventCameFromBulletOrBaddie(evt)) {
+        if(!collisionEventCameFromBulletOrBaddie(evt)) {
             this.hp--;
             if (this.hp <= 0) {
                 if (this.explode) {
                     animManager.play(this.explode, this.pos);
                 }
 
-                stats.score += Config.scoreGainedFromKillingEnemy;
+                stats.score += Config.scoreGainedFromKillingBaddie;
+
                 if (this.fireTimer) {
                     this.fireTimer.cancel();
                 }
                 this.kill();
 
-                Game.removeEnemyFromEnemiesOnScreenCounter();
+                Game.letGameClassKnowAnEnemyDied();
             } else {
                 if (this.explosionFromDamage) {
                     animManager.play(this.explosionFromDamage, this.pos);

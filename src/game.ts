@@ -1,7 +1,7 @@
 import * as ex from 'excalibur';
 import stats from './stats';
 import Bullet from './actors/bullet';
-import Config from './config';
+import Config, { gameConfig } from './config';
 import EnemyFactory from './factories/enemyFactory';
 import animManager from './actors/animation-manager';
 import Ship from './actors/ship';
@@ -22,8 +22,8 @@ export default class Game extends ex.Scene {
         const ship = new Ship(engine.halfDrawWidth, 800, 80, 80);
         engine.add(ship);
 
-        const scoreLabel = new ex.Label("Score: " + stats.score, 20, 50);
-        scoreLabel.color = ex.Color.Azure;
+        const scoreLabel = new ex.Label("Score: " + stats.score, 20, 50, 'roboto');
+        scoreLabel.color = gameConfig.scoreLabelColor;
         scoreLabel.scale = new ex.Vector(3, 3);
         scoreLabel.on('preupdate', function(this: ex.Label){
             this.text = "Score: " + stats.score;
@@ -52,7 +52,7 @@ export default class Game extends ex.Scene {
     private generateEnemyTimer(engine: ex.Engine): ex.Timer {
         const intervalToMakeTimerRepeatForever = -1;
         return new ex.Timer(() => {
-            const generatedEnemy: Baddie | Boss | undefined = EnemyFactory.buildBaddie();
+            const generatedEnemy: Baddie | Boss | undefined = EnemyFactory.buildEnemy();
             if (generatedEnemy) {
                 engine.add(generatedEnemy);
                 Game._enemiesOnScreenCounter++;
@@ -72,7 +72,7 @@ export default class Game extends ex.Scene {
         return Game._enemiesOnScreenCounter < Config.limitOfEnemiesOnScreen;
     }
 
-    static removeEnemyFromEnemiesOnScreenCounter(): void {
+    static letGameClassKnowAnEnemyDied(): void {
         this._enemiesOnScreenCounter--;
     }
 }

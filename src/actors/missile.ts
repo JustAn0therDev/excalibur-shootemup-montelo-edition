@@ -1,5 +1,5 @@
 import * as ex from "excalibur";
-import ActorUtils from "../utils/actorUtils";
+import { collisionEventCameFromBaddie } from "../utils/actorUtils";
 import { gameSheet } from "../resources";
 
 export class Missile extends ex.Actor {
@@ -17,7 +17,7 @@ export class Missile extends ex.Actor {
     }
     
     onPreCollision(evt: ex.PreCollisionEvent): void {
-        if(!ActorUtils.collisionEventCameFromBaddie(evt)) {
+        if(!collisionEventCameFromBaddie(evt)) {
             this.kill();
          }
     }

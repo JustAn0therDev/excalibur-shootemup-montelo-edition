@@ -1,7 +1,7 @@
 import * as ex from "excalibur";
 import Config from "../config";
 import Bullet from "./bullet";
-import ActorUtils from "../utils/actorUtils";
+import { collisionEventCameFromBulletOrBaddie } from "../utils/actorUtils";
 import AnimationFactory from '../factories/animationFactory';
 import stats from "../stats";
 import animManager from "./animation-manager";
@@ -65,7 +65,7 @@ export default class Ship extends ex.Actor {
     }
 
     onPreCollision(evt: ex.PreCollisionEvent): void {
-        if(ActorUtils.collisionEventCameFromBulletOrBaddie(evt)){
+        if(collisionEventCameFromBulletOrBaddie(evt)){
             this.actions.blink(300, 300, 3);
             stats.hp -= Config.enemyDamage;
             if (stats.hp <= 0) {

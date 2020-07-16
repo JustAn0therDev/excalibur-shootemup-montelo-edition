@@ -4,6 +4,7 @@ export const gameConfig = {
    gameBackgroundColor: ex.Color.Azure,
    gameWidth: window.screen.width,
    gameHeight: window.screen.height,
+   scoreLabelColor: ex.Color.Black
 }
 
 export default {
@@ -21,7 +22,7 @@ export default {
    totalHp: 1, 
    baddieHp: 3,
    bossHp: 15,
-   scoreGainedFromKillingEnemy: 100,
+   scoreGainedFromKillingBaddie: 100,
    scoreGainedFromKillingBoss: 500,
    chancesOfGeneratingBoss: 10,
    limitOfEnemiesOnScreen: 3

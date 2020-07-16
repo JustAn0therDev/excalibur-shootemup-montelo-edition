@@ -3,20 +3,39 @@ import Baddie from '../actors/baddie';
 import Game from '../game';
 import Config from '../config';
 import { randomIntFromInterval } from '../utils/numberUtils';
+import enemyFactoryParameter from '../interfaces/parameterObjects/EnemyFactoryParameter';
 
 export default class EnemyFactory {
-     static buildBaddie(): Baddie | Boss | undefined {
+     static buildEnemy(): Baddie | Boss | undefined {
         if (Game.canRenderAnotherEnemyOnScreen()) {
-            let vectorX = Math.random() * 1000;
-            let vectorY = -100;
             let defaultSize = 80;
-            if (this.shouldGenerateBoss()) {
-                return new Boss(vectorX, vectorY, defaultSize, defaultSize);
-            } else {
-                return new Baddie(vectorX, vectorY, defaultSize, defaultSize);
+            const dataToCreateEnemy: enemyFactoryParameter = {
+                vectorX: Math.random() * 1000,
+                vectorY: -100,
+                width: defaultSize,
+                height: defaultSize
             }
+            return this.checkKindOfEnemyThenReturnIt(dataToCreateEnemy);
         }
         return undefined;
+    }
+
+    private static checkKindOfEnemyThenReturnIt(dataToCreateNewEnemy: enemyFactoryParameter ):
+    Baddie | Boss | undefined {
+        if (this.shouldGenerateBoss()) {
+            return new Boss(
+                dataToCreateNewEnemy.vectorX, 
+                dataToCreateNewEnemy.vectorY, 
+                dataToCreateNewEnemy.width, 
+                dataToCreateNewEnemy.height);
+        } else {
+            return new Baddie(
+                dataToCreateNewEnemy.vectorX, 
+                dataToCreateNewEnemy.vectorY, 
+                dataToCreateNewEnemy.width, 
+                dataToCreateNewEnemy.height
+            );
+        }
     }
 
     private static shouldGenerateBoss(): boolean {

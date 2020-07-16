@@ -10,8 +10,6 @@ const engine: ex.Engine = new ex.Engine({
     displayMode: ex.DisplayMode.FullScreen
 });
 
-engine.setAntialiasing(false);
-
 engine.add('game', new Game(engine));
 engine.goToScene('game');
 

@@ -3,7 +3,7 @@ import Game from '../game';
 import Config from "../config";
 import Bullet from "./bullet";
 import stats from "../stats";
-import ActorUtils from "../utils/actorUtils";
+import { collisionEventCameFromBulletOrBoss } from "../utils/actorUtils";
 import AnimationFactory from '../factories/animationFactory';
 import animManager from "./animation-manager";
 import { gameSheet, explosionSpriteSheet } from "../resources";
@@ -69,7 +69,7 @@ export default class Boss extends ex.Actor {
 
     // Fires before excalibur collision resolution
     private onPreCollision(evt: ex.PreCollisionEvent): void {
-        if(!ActorUtils.collisionEventCameFromBulletOrBoss(evt)) {
+        if(!collisionEventCameFromBulletOrBoss(evt)) {
             this.hp--;
             if (this.hp === 0) {
                 if (this.explode) {
@@ -83,7 +83,7 @@ export default class Boss extends ex.Actor {
                 }
                 this.kill();
                 
-                Game.removeEnemyFromEnemiesOnScreenCounter();
+                Game.letGameClassKnowAnEnemyDied();
             } else {
                 if (this.explosionFromDamage) {
                     animManager.play(this.explosionFromDamage, this.pos);

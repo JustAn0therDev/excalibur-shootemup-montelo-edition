@@ -1,3 +1,11 @@
+import * as ex from 'excalibur';
+
+export const gameConfig = {
+   gameBackgroundColor: ex.Color.Azure,
+   gameWidth: window.screen.width,
+   gameHeight: window.screen.height,
+}
+
 export default {
    playerBulletVelocity: -475,
    playerSpeed: 700,

@@ -5,8 +5,6 @@ import Config, { gameConfig } from './config';
 import EnemyFactory from './factories/enemyFactory';
 import animManager from './actors/animation-manager';
 import Ship from './actors/ship';
-import Boss from './actors/boss';
-import Baddie from './actors/baddie';
 
 export default class Game extends ex.Scene {
     static baddieBullets: Array<Bullet> = new Array<Bullet>();
@@ -52,7 +50,7 @@ export default class Game extends ex.Scene {
     private generateEnemyTimer(engine: ex.Engine): ex.Timer {
         const intervalToMakeTimerRepeatForever = -1;
         return new ex.Timer(() => {
-            const generatedEnemy: Baddie | Boss | undefined = EnemyFactory.buildEnemy();
+            const generatedEnemy: ex.Actor | undefined = EnemyFactory.buildEnemy();
             if (generatedEnemy) {
                 engine.add(generatedEnemy);
                 Game._enemiesOnScreenCounter++;

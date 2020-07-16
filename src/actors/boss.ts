@@ -3,9 +3,9 @@ import Game from '../game';
 import Config from "../config";
 import Bullet from "./bullet";
 import stats from "../stats";
-import { collisionEventCameFromBulletOrBoss } from "../utils/actorUtils";
 import AnimationFactory from '../factories/animationFactory';
 import animManager from "./animation-manager";
+import { collisionEventCameFromBulletOrBoss } from "../utils/actorUtils";
 import { gameSheet, explosionSpriteSheet } from "../resources";
 
 export default class Boss extends ex.Actor {

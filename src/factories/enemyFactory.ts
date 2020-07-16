@@ -2,8 +2,8 @@ import Boss from '../actors/boss';
 import Baddie from '../actors/baddie';
 import Game from '../game';
 import Config from '../config';
-import { randomIntFromInterval } from '../utils/numberUtils';
 import enemyFactoryParameter from '../interfaces/parameterObjects/EnemyFactoryParameter';
+import { randomIntFromInterval } from '../utils/numberUtils';
 
 export default class EnemyFactory {
      static buildEnemy(): ex.Actor | undefined {

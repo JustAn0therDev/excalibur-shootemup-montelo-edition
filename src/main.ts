@@ -1,6 +1,6 @@
 import * as ex from 'excalibur';
-import { gameConfig } from './config';
 import Game from './game';
+import { gameConfig } from './config';
 import { loader } from './resources';
 
 const engine: ex.Engine = new ex.Engine({

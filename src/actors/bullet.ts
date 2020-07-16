@@ -1,6 +1,5 @@
 import * as ex from "excalibur";
 import Game from '../game';
-
 import Config from "../config";
 import { gameSheet } from "../resources";
 

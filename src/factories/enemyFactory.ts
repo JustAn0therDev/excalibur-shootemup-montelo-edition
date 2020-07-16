@@ -6,7 +6,7 @@ import { randomIntFromInterval } from '../utils/numberUtils';
 import enemyFactoryParameter from '../interfaces/parameterObjects/EnemyFactoryParameter';
 
 export default class EnemyFactory {
-     static buildEnemy(): Baddie | Boss | undefined {
+     static buildEnemy(): ex.Actor | undefined {
         if (Game.canRenderAnotherEnemyOnScreen()) {
             let defaultSize = 80;
             const dataToCreateEnemy: enemyFactoryParameter = {
@@ -20,22 +20,23 @@ export default class EnemyFactory {
         return undefined;
     }
 
-    private static checkKindOfEnemyThenReturnIt(dataToCreateNewEnemy: enemyFactoryParameter ):
-    Baddie | Boss {
+    private static checkKindOfEnemyThenReturnIt(dataToCreateNewEnemy: enemyFactoryParameter): 
+    ex.Actor 
+    {
         if (this.shouldGenerateBoss()) {
             return new Boss(
                 dataToCreateNewEnemy.vectorX, 
                 dataToCreateNewEnemy.vectorY, 
                 dataToCreateNewEnemy.width, 
                 dataToCreateNewEnemy.height);
-        } else {
-            return new Baddie(
-                dataToCreateNewEnemy.vectorX, 
-                dataToCreateNewEnemy.vectorY, 
-                dataToCreateNewEnemy.width, 
-                dataToCreateNewEnemy.height
-            );
-        }
+        } 
+
+        return new Baddie(
+            dataToCreateNewEnemy.vectorX, 
+            dataToCreateNewEnemy.vectorY, 
+            dataToCreateNewEnemy.width, 
+            dataToCreateNewEnemy.height
+        );
     }
 
     private static shouldGenerateBoss(): boolean {

@@ -25,7 +25,6 @@ class AnimationManager extends ex.Actor {
         .filter(animationNode => !animationNode.anim.isDone());
     }
 
-    // PostDraw gives the rendering context and the time between frames
     onPostDraw(ctx: CanvasRenderingContext2D): void {
         for (let animationNode of this.animationNodes) {
             animationNode.anim.draw(

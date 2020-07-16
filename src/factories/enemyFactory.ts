@@ -21,7 +21,7 @@ export default class EnemyFactory {
     }
 
     private static checkKindOfEnemyThenReturnIt(dataToCreateNewEnemy: enemyFactoryParameter ):
-    Baddie | Boss | undefined {
+    Baddie | Boss {
         if (this.shouldGenerateBoss()) {
             return new Boss(
                 dataToCreateNewEnemy.vectorX, 

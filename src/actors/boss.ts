@@ -2,19 +2,16 @@ import * as ex from "excalibur";
 import Game from '../game';
 import Config from "../config";
 import Bullet from "./bullet";
-import stats from "../stats";
 import AnimationFactory from '../factories/animationFactory';
-import animManager from "./animation-manager";
-import { collisionEventCameFromBulletOrBoss } from "../utils/actorUtils";
+import { checkIfEnemyShouldBeKilledOnCollision } from '../utils/collisionUtils';
 import { gameSheet, explosionSpriteSheet } from "../resources";
 
 export default class Boss extends ex.Actor {
     private anim?: ex.Animation;
-    private explode?: ex.Animation;
-    private explosionFromDamage?: ex.Animation;
-    private fireTimer?: ex.Timer;
     private fireAngle: number = Math.random() * Math.PI * 2;
-    private hp: number = Config.bossHp;
+    explode?: ex.Animation;
+    hp: number = Config.bossHp;
+    fireTimer?: ex.Timer;
     
     constructor(x: number, y: number, width: number, height: number) {
         super({
@@ -27,11 +24,9 @@ export default class Boss extends ex.Actor {
         this.on('precollision', this.onPreCollision);
     }
 
-    // OnInitialize is called before the 1st actor update
     onInitialize(engine: ex.Engine): void {
         // Initialize actor
 
-        // Setup visuals
         this.anim = gameSheet.getAnimationByIndices(engine, [10, 11, 12], 100)
         this.anim.scale = new ex.Vector(8, 8);
         this.addDrawing("default", this.anim);
@@ -45,11 +40,6 @@ export default class Boss extends ex.Actor {
 
             animationSpeed = 100;
             vectorSize = 1;
-
-            this.explosionFromDamage = AnimationFactory.buildAnimation(animationSpeed, 
-                explosionSpriteSheet, 
-                vectorSize, 
-                engine);
 
         // Setup patrolling behavior
         this.actions.moveTo(this.pos.x, this.pos.y + 800, Config.enemySpeed)
@@ -67,29 +57,13 @@ export default class Boss extends ex.Actor {
         engine.addTimer(this.fireTimer);
     }
 
-    // Fires before excalibur collision resolution
     private onPreCollision(evt: ex.PreCollisionEvent): void {
-        if(!collisionEventCameFromBulletOrBoss(evt)) {
-            this.hp--;
-            if (this.hp === 0) {
-                if (this.explode) {
-                    animManager.play(this.explode, this.pos);
-                }
+        checkIfEnemyShouldBeKilledOnCollision(this, evt);
+        this.notifyGameClassThisEnemyWasKilled();
+    }
 
-                stats.score += Config.scoreGainedFromKillingBoss;
-
-                if (this.fireTimer) {
-                    this.fireTimer.cancel();
-                }
-                this.kill();
-                
-                Game.letGameClassKnowAnEnemyDied();
-            } else {
-                if (this.explosionFromDamage) {
-                    animManager.play(this.explosionFromDamage, this.pos);
-                }
-            }
-        }
+    private notifyGameClassThisEnemyWasKilled(): void {
+        Game.removeEnemyFromEnemiesOnScreenCounter();
     }
 
     private fire(engine: ex.Engine): void {

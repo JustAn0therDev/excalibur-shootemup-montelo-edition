@@ -8,7 +8,7 @@ import Ship from './actors/ship';
 
 export default class Game extends ex.Scene {
     static baddieBullets: Array<Bullet> = new Array<Bullet>();
-    private static _enemiesOnScreenCounter: number = 0;
+    private static _numberOfEnemiesOnScreen = 0;
 
     constructor(engine: ex.Engine) {
         super(engine);
@@ -33,7 +33,7 @@ export default class Game extends ex.Scene {
                                             engine.halfDrawWidth - 510,
                                             engine.halfDrawHeight, 'roboto');
 
-        gameOverLabel.color = ex.Color.Green.clone();
+        gameOverLabel.color = ex.Color.Green;
         gameOverLabel.scale = new ex.Vector(5, 5);
 
         const enemyTimer: ex.Timer = this.generateEnemyTimer(engine);
@@ -53,7 +53,7 @@ export default class Game extends ex.Scene {
             const generatedEnemy: ex.Actor | undefined = EnemyFactory.buildEnemy();
             if (generatedEnemy) {
                 engine.add(generatedEnemy);
-                Game._enemiesOnScreenCounter++;
+                Game._numberOfEnemiesOnScreen++;
             }
         }, Config.spawnTimeInMilisseconds, true, intervalToMakeTimerRepeatForever);
     }
@@ -67,10 +67,10 @@ export default class Game extends ex.Scene {
     }
 
     static canRenderAnotherEnemyOnScreen(): boolean {
-        return Game._enemiesOnScreenCounter < Config.limitOfEnemiesOnScreen;
+        return Game._numberOfEnemiesOnScreen < Config.limitOfEnemiesOnScreen;
     }
 
-    static letGameClassKnowAnEnemyDied(): void {
-        this._enemiesOnScreenCounter--;
+    static removeEnemyFromEnemiesOnScreenCounter(): void {
+        this._numberOfEnemiesOnScreen--;
     }
 }

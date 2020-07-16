@@ -46,10 +46,6 @@ export default class Ship extends ex.Actor {
             }
          });
 
-        // Pointer
-        engine.input.pointers.primary.on('down', (evt) => this.handlePointerEvent(engine, <ex.Input.PointerDownEvent>evt));
-        engine.input.pointers.primary.on('up', () => this.vel = ex.Vector.Zero.clone());
-
         // Get animation
         const anim = gameSheet.getAnimationByIndices(engine, [0, 1, 2], 100);
         anim.scale = new ex.Vector(3, 3);
@@ -79,6 +75,10 @@ export default class Ship extends ex.Actor {
          }
     }
 
+    private stopRegisteringFireInput(): void {
+        this.throttleFire = undefined;
+    }
+
     onPostUpdate(engine: ex.Engine): void {
        // Keep player in the viewport
        if(this.pos.x < 0) this.pos.x = 0;
@@ -87,25 +87,10 @@ export default class Ship extends ex.Actor {
        if(this.pos.y > engine.drawHeight - this.height) this.pos.y = (engine.drawHeight - this.height);
     }
 
-    private stopRegisteringFireInput(): void {
-        this.throttleFire = undefined;
-    }
-
     private fire = (engine: ex.Engine): void => {
         let bullet = new Bullet(this.pos.x + (this.flipBarrel?-40:40), this.pos.y - 20, 0, Config.playerBulletVelocity, this);
         this.flipBarrel = !this.flipBarrel;
         engine.add(bullet);
-    }
-
-    handlePointerEvent = (engine: ex.Engine, evt: ex.Input.PointerDownEvent): void => {
-
-        let dir = evt.worldPos.sub(this.pos);
-        let distance = dir.magnitude();
-        if (distance > 50) {
-            this.vel = dir.scale(Config.playerSpeed/distance);
-        } else {
-            this.throttleFire ? this.throttleFire(engine) : null;
-        }
     }
 
     handleKeyEvent = (engine: ex.Engine, evt: ex.Input.KeyEvent): void => {

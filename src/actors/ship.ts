@@ -103,23 +103,19 @@ export default class Ship extends ex.Actor {
             }
         }
         // Some keys do the same thing
-        if (evt.key === ex.Input.Keys.Up ||
-            evt.key === ex.Input.Keys.W) {
+        if (evt.key === ex.Input.Keys.W) {
             dir.y--;
         }
 
-        if (evt.key === ex.Input.Keys.Left ||
-            evt.key === ex.Input.Keys.A) {
+        if (evt.key === ex.Input.Keys.A) {
             dir.x--;
         }
 
-        if (evt.key === ex.Input.Keys.Right ||
-            evt.key === ex.Input.Keys.D) {
+        if (evt.key === ex.Input.Keys.D) {
             dir.x++;
         }
 
-        if (evt.key === ex.Input.Keys.Down ||
-            evt.key ===  ex.Input.Keys.S) {
+        if (evt.key ===  ex.Input.Keys.S) {
             dir.y++;
         }
 

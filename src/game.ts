@@ -1,10 +1,10 @@
 import * as ex from 'excalibur';
 import stats from './stats';
 import Bullet from './actors/bullet';
-import Config, { gameConfig } from './config';
 import EnemyFactory from './factories/enemyFactory';
 import animManager from './actors/animation-manager';
 import Ship from './actors/ship';
+import Config, { gameConfig } from './config';
 
 export default class Game extends ex.Scene {
     static baddieBullets: Array<Bullet> = new Array<Bullet>();

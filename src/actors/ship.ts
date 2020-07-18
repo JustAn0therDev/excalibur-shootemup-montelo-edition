@@ -25,6 +25,7 @@ export default class Ship extends ex.Actor {
     private flipBarrel = false;
     private throttleFire?: FireFunction;
     private explode?: ex.Animation;
+    private controlMap?: Map<number, (dir: ex.Vector) => number>;
     constructor(x: number, y: number, width: number, height: number) {
         super({
             pos: new ex.Vector(x, y),
@@ -36,9 +37,9 @@ export default class Ship extends ex.Actor {
 
     onInitialize(engine: ex.Engine): void {
         this.throttleFire = throttle(this.fire, Config.playerFireThrottle);
+        this.initializeControlMap();
         this.on('precollision', this.onPreCollision);
 
-        // Keyboard
         engine.input.keyboard.on('hold', (evt) => this.handleKeyEvent(engine, evt));
         engine.input.keyboard.on('release', (evt: ex.Input.KeyEvent) => { 
             if(evt.key !== ex.Input.Keys.Space) {
@@ -46,7 +47,6 @@ export default class Ship extends ex.Actor {
             }
          });
 
-        // Get animation
         const anim = gameSheet.getAnimationByIndices(engine, [0, 1, 2], 100);
         anim.scale = new ex.Vector(3, 3);
         this.addDrawing("default", anim);
@@ -58,6 +58,14 @@ export default class Ship extends ex.Actor {
             explosionSpriteSheet,
             vectorSize,
             engine);
+    }
+
+    private initializeControlMap() {
+        this.controlMap = new Map<number, (dir: ex.Vector) => number>()
+        .set(87, (dir) => dir.y--)
+        .set(65, (dir) => dir.x--)
+        .set(68, (dir) => dir.x++)
+        .set(83, (dir) => dir.y++)
     }
 
     onPreCollision(evt: ex.PreCollisionEvent): void {
@@ -88,13 +96,15 @@ export default class Ship extends ex.Actor {
     }
 
     private fire = (engine: ex.Engine): void => {
-        let bullet = new Bullet(this.pos.x + (this.flipBarrel?-40:40), this.pos.y - 20, 0, Config.playerBulletVelocity, this);
+        const bullet = new Bullet(this.pos.x + (this.flipBarrel?-40:40), this.pos.y - 20, 0, Config.playerBulletVelocity, this);
         this.flipBarrel = !this.flipBarrel;
         engine.add(bullet);
     }
 
     handleKeyEvent = (engine: ex.Engine, evt: ex.Input.KeyEvent): void => {
         let dir = ex.Vector.Zero.clone();
+        
+        this.controlMap?.get(evt.key)?.call(this, dir);
 
         if (evt.key === ex.Input.Keys.Space) {
             this.throttleFire ? this.throttleFire(engine) : null;
@@ -102,18 +112,6 @@ export default class Ship extends ex.Actor {
                 dir = this.vel.normalize();
             }
         }
-        
-        if (evt.key === ex.Input.Keys.W) 
-            dir.y--;
-
-        if (evt.key === ex.Input.Keys.A) 
-            dir.x--;
-
-        if (evt.key === ex.Input.Keys.D) 
-            dir.x++;
-
-        if (evt.key ===  ex.Input.Keys.S) 
-            dir.y++;
 
         if (dir.x !== 0 || dir.y !== 0) 
             this.vel = dir.normalize().scale(Config.playerSpeed);

@@ -102,25 +102,20 @@ export default class Ship extends ex.Actor {
                 dir = this.vel.normalize();
             }
         }
-        // Some keys do the same thing
-        if (evt.key === ex.Input.Keys.W) {
+        
+        if (evt.key === ex.Input.Keys.W) 
             dir.y--;
-        }
 
-        if (evt.key === ex.Input.Keys.A) {
+        if (evt.key === ex.Input.Keys.A) 
             dir.x--;
-        }
 
-        if (evt.key === ex.Input.Keys.D) {
+        if (evt.key === ex.Input.Keys.D) 
             dir.x++;
-        }
 
-        if (evt.key ===  ex.Input.Keys.S) {
+        if (evt.key ===  ex.Input.Keys.S) 
             dir.y++;
-        }
 
-        if (dir.x !== 0 || dir.y !== 0) {
+        if (dir.x !== 0 || dir.y !== 0) 
             this.vel = dir.normalize().scale(Config.playerSpeed);
-        }
     }
 }

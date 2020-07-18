@@ -36,6 +36,13 @@ export default class Ship extends ex.Actor {
     }
 
     onInitialize(engine: ex.Engine): void {
+        const anim = gameSheet.getAnimationByIndices(engine, [0, 1, 2], 100);
+        const animationSpeed = 80;
+        const vectorSize = 2;
+
+        anim.scale = new ex.Vector(3, 3);
+        this.addDrawing("default", anim);
+
         this.throttleFire = throttle(this.fire, Config.playerFireThrottle);
         this.initializeControlMap();
         this.on('precollision', this.onPreCollision);
@@ -47,13 +54,6 @@ export default class Ship extends ex.Actor {
             }
          });
 
-        const anim = gameSheet.getAnimationByIndices(engine, [0, 1, 2], 100);
-        anim.scale = new ex.Vector(3, 3);
-        this.addDrawing("default", anim);
-
-        let animationSpeed = 80;
-        let vectorSize = 2;
-
         this.explode = AnimationFactory.buildAnimation(animationSpeed,
             explosionSpriteSheet,
             vectorSize,
@@ -62,10 +62,10 @@ export default class Ship extends ex.Actor {
 
     private initializeControlMap() {
         this.controlMap = new Map<number, (dir: ex.Vector) => number>()
-        .set(87, (dir) => dir.y--)
-        .set(65, (dir) => dir.x--)
-        .set(68, (dir) => dir.x++)
-        .set(83, (dir) => dir.y++)
+        .set(ex.Input.Keys.W, (dir) => dir.y--)
+        .set(ex.Input.Keys.A, (dir) => dir.x--)
+        .set(ex.Input.Keys.D, (dir) => dir.x++)
+        .set(ex.Input.Keys.S, (dir) => dir.y++)
     }
 
     onPreCollision(evt: ex.PreCollisionEvent): void {

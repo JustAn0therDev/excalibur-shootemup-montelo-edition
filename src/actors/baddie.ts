@@ -20,10 +20,7 @@ export default class Baddie extends ex.Actor {
             height: height,
         });
 
-        // Passive receives collision events but does not participate in resolution
         this.body.collider.type = ex.CollisionType.Passive;
-
-        // Setup listeners
         this.on('precollision', this.onPreCollision);
     }
 

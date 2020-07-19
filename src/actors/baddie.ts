@@ -59,7 +59,7 @@ export default class Baddie extends ex.Actor {
     }
 
     private notifyGameClassThisEnemyWasKilled(): void {
-        Game.removeEnemyFromEnemiesOnScreenCounter();
+        Game.removeEnemyFromEnemyCounter();
     }
 
     private fire(engine: ex.Engine): void {

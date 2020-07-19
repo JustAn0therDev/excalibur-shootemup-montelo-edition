@@ -13,7 +13,6 @@ export function checkIfEnemyShouldBeKilledOnCollision(
             if (enemy.explode) {
                 animManager.play(enemy.explode, enemy.pos);
             }
-
             stats.score += config.scoreGainedFromKillingBoss;
 
             if (enemy.fireTimer) {

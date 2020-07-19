@@ -8,7 +8,7 @@ export const gameConfig = {
 }
 
 export default {
-   playerBulletVelocity: -475,
+   playerBulletVelocity: -375,
    playerSpeed: 700,
    playerFireThrottle: 50,
    missileSpeed: -400,

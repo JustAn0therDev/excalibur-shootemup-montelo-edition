@@ -25,7 +25,6 @@ export default class Baddie extends ex.Actor {
     }
 
     onInitialize(engine: ex.Engine): void {
-        // Initialize actor
         this.anim = gameSheet.getAnimationByIndices(engine, [10, 11, 12], 100)
         this.anim.scale = new ex.Vector(4, 4);
         this.addDrawing("default", this.anim);
@@ -38,7 +37,6 @@ export default class Baddie extends ex.Actor {
             vectorSize, 
             engine);
             
-        // Setup patrolling behavior
         this.actions.moveTo(this.pos.x, this.pos.y + 800, Config.enemySpeed)
                     .moveTo(this.pos.x + 800, this.pos.y, Config.enemySpeed)
                     .moveTo(this.pos.x + 800, this.pos.y + 800, Config.enemySpeed)

@@ -102,18 +102,31 @@ export default class Ship extends ex.Actor {
     }
 
     handleKeyEvent = (engine: ex.Engine, evt: ex.Input.KeyEvent): void => {
-        let dir = ex.Vector.Zero.clone();
-        
+        const dir = ex.Vector.Zero.clone();
         this.controlMap?.get(evt.key)?.call(this, dir);
 
-        if (evt.key === ex.Input.Keys.Space) {
-            this.throttleFire ? this.throttleFire(engine) : null;
-            if (this.vel.x !== 0 || this.vel.y !== 0) {
-                dir = this.vel.normalize();
-            }
-        }
+        this.handleSpaceKeyEvent(evt, engine, dir);
+        this.configShipSpeed(dir);
+    }
 
-        if (dir.x !== 0 || dir.y !== 0) 
+    private handleSpaceKeyEvent(evt: ex.Input.KeyEvent, engine: ex.Engine, dir: ex.Vector): void {
+        if (evt.key === ex.Input.Keys.Space) {
+            this.checkIfHasToThrottleFire(engine, evt);
+            this.checkIfShouldNormalizeVectorVelocity(dir);
+        }
+    }
+
+    private checkIfHasToThrottleFire(engine: ex.Engine, evt: ex.Input.KeyEvent): void {
+        this.throttleFire ? this.throttleFire(engine) : null;
+    }
+
+    private checkIfShouldNormalizeVectorVelocity(dir: ex.Vector): void {
+        if (this.vel.x !== 0 || this.vel.y !== 0) 
+            dir = this.vel.normalize();
+    }
+
+    private configShipSpeed(dir: ex.Vector): void {
+        if (dir.x !== 0 || dir.y !== 0)
             this.vel = dir.normalize().scale(Config.playerSpeed);
     }
 }

@@ -70,7 +70,7 @@ export default class Game extends ex.Scene {
         return Game._numberOfEnemiesOnScreen < Config.limitOfEnemiesOnScreen;
     }
 
-    static removeEnemyFromEnemiesOnScreenCounter(): void {
+    static removeEnemyFromEnemyCounter(): void {
         this._numberOfEnemiesOnScreen--;
     }
 }

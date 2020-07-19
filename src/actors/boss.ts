@@ -63,7 +63,7 @@ export default class Boss extends ex.Actor {
     }
 
     private notifyGameClassThisEnemyWasKilled(): void {
-        Game.removeEnemyFromEnemiesOnScreenCounter();
+        Game.removeEnemyFromEnemyCounter();
     }
 
     private fire(engine: ex.Engine): void {

@@ -30,7 +30,7 @@ export default class Baddie extends ex.Actor {
         this.addDrawing("default", this.anim);
 
             let animationSpeed = 40;
-            let vectorSize = 3, smallExplosionVectorSize = 1;
+            let vectorSize = 3;
 
             this.explode = AnimationFactory.buildAnimation(animationSpeed, 
             explosionSpriteSheet, 

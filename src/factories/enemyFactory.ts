@@ -8,12 +8,11 @@ import { randomIntFromInterval } from '../utils/numberUtils';
 export default class EnemyFactory {
      static buildEnemy(): ex.Actor | undefined {
         if (Game.canRenderAnotherEnemyOnScreen()) {
-            let defaultSize = 80;
             const dataToCreateEnemy: enemyFactoryParameter = {
                 vectorX: Math.random() * 1000,
                 vectorY: -100,
-                width: defaultSize,
-                height: defaultSize
+                width: 80,
+                height: 80
             }
             return this.checkKindOfEnemyThenReturnIt(dataToCreateEnemy);
         }

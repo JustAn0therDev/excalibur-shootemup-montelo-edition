@@ -1,6 +1,6 @@
 # Excalibur Shoot'em Up Sample - Montelo Edition
 
-This version of the ExcaliburJS engine game sample is something I made for myself so I could understand the engine a bit better. It's great and give some insight on how to create make for browsers using TypeScript (although some knowledge of memory management and performance optimizations could be good, as the engine does consume a lot of resources from the browser/device).
+This version of the ExcaliburJS engine game sample is something I made for myself so I could understand the engine a bit better. It's great and gave me some insight on how to create games using TypeScript (although some knowledge of memory management and performance optimizations could help, as the engine does seem to consume a reasonable amount of resources from the client).
 
 ## Running locally
 

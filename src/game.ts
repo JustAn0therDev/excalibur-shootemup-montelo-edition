@@ -7,7 +7,7 @@ import Ship from './actors/ship';
 import Config, { gameConfig } from './config';
 
 export default class Game extends ex.Scene {
-    static baddieBullets: Array<Bullet> = new Array<Bullet>();
+    static baddieBullets: WeakSet<Bullet> = new WeakSet<Bullet>();
     private static _numberOfEnemiesOnScreen = 0;
 
     constructor(engine: ex.Engine) {
@@ -59,7 +59,7 @@ export default class Game extends ex.Scene {
     }
 
     static pushBulletInBulletArray(bullet: Bullet): void {
-        Game.baddieBullets.push(bullet);
+        Game.baddieBullets.add(bullet);
     }
 
     static removeBulletFromBulletArray(bullet: Bullet): void {

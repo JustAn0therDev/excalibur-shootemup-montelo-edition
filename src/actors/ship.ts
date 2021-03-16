@@ -1,12 +1,13 @@
-import * as ex from "excalibur";
-import Config from "../config";
-import Bullet from "./bullet";
-import { collisionEventCameFromBulletOrBaddie } from "../utils/actorUtils";
-import AnimationFactory from '../factories/animationFactory';
+import Game from "../game";
 import stats from "../stats";
+import Bullet from "./bullet";
+import Config from "../config";
+import * as ex from "excalibur";
 import animManager from "./animation-manager";
 import { FireFunction } from '../types/FireFunction';
+import AnimationFactory from '../factories/animationFactory';
 import { gameSheet, explosionSpriteSheet } from "../resources";
+import { collisionEventCameFromBaddie, collisionEventCameFromBaddieOrBossBullet, collisionEventCameFromBoss } from "../utils/actorUtils";
 
 const throttle = function(this: any, func: FireFunction, throttle: number): FireFunction {
     var lastTime = Date.now();
@@ -25,14 +26,16 @@ export default class Ship extends ex.Actor {
     private flipBarrel = false;
     private throttleFire?: FireFunction;
     private explode?: ex.Animation;
-    private controlMap?: Map<number, (dir: ex.Vector) => number>;
-    constructor(x: number, y: number, width: number, height: number) {
+    private keyboardControlsMap?: Map<number, (dir: ex.Vector) => number>;
+    private game: Game;
+    constructor(x: number, y: number, width: number, height: number, game: Game) {
         super({
             pos: new ex.Vector(x, y),
             width: width,
             height: height,
         });
         this.body.collider.type = ex.CollisionType.Passive;
+        this.game = game;
     }
 
     onInitialize(engine: ex.Engine): void {
@@ -61,7 +64,7 @@ export default class Ship extends ex.Actor {
     }
 
     private initializeControlMap() {
-        this.controlMap = new Map<number, (dir: ex.Vector) => number>()
+        this.keyboardControlsMap = new Map<number, (dir: ex.Vector) => number>()
         .set(ex.Input.Keys.W, (dir) => dir.y--)
         .set(ex.Input.Keys.A, (dir) => dir.x--)
         .set(ex.Input.Keys.D, (dir) => dir.x++)
@@ -69,7 +72,8 @@ export default class Ship extends ex.Actor {
     }
 
     onPreCollision(evt: ex.PreCollisionEvent): void {
-        if(collisionEventCameFromBulletOrBaddie(evt)){
+        const collidedWithEnemy = collisionEventCameFromBaddieOrBossBullet(evt) || collisionEventCameFromBaddie(evt) || collisionEventCameFromBoss(evt);
+        if (collidedWithEnemy) {
             this.actions.blink(300, 300, 3);
             stats.hp -= Config.enemyDamage;
             if (stats.hp <= 0) {
@@ -88,7 +92,7 @@ export default class Ship extends ex.Actor {
     }
 
     onPostUpdate(engine: ex.Engine): void {
-       // Keep player in the viewport
+       // Keep player in the viewport where the ship can still be seen on screen
        if(this.pos.x < 0) this.pos.x = 0;
        if(this.pos.y < 0) this.pos.y = 0;
        if(this.pos.x > engine.drawWidth - this.width) this.pos.x = (engine.drawWidth - this.width);
@@ -96,14 +100,14 @@ export default class Ship extends ex.Actor {
     }
 
     private fire = (engine: ex.Engine): void => {
-        const bullet = new Bullet(this.pos.x + (this.flipBarrel?-40:40), this.pos.y - 20, 0, Config.playerBulletVelocity, this);
+        const bullet = new Bullet(this.pos.x + (this.flipBarrel?-40:40), this.pos.y - 20, 0, Config.playerBulletVelocity, this.game, this);
         this.flipBarrel = !this.flipBarrel;
         engine.add(bullet);
     }
 
     handleKeyEvent = (engine: ex.Engine, evt: ex.Input.KeyEvent): void => {
         const dir = ex.Vector.Zero.clone();
-        this.controlMap?.get(evt.key)?.call(this, dir);
+        this.keyboardControlsMap?.get(evt.key)?.call(this, dir);
 
         this.handleSpaceKeyEvent(evt, engine, dir);
         this.configShipSpeed(dir);

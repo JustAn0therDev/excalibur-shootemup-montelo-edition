@@ -12,8 +12,9 @@ export default class Boss extends ex.Actor {
     explode?: ex.Animation;
     hp: number = Config.bossHp;
     fireTimer?: ex.Timer;
+    private game: Game;
     
-    constructor(x: number, y: number, width: number, height: number) {
+    constructor(x: number, y: number, width: number, height: number, game: Game) {
         super({
             pos: new ex.Vector(x, y),
             width: width,
@@ -22,6 +23,7 @@ export default class Boss extends ex.Actor {
 
         this.body.collider.type = ex.CollisionType.Passive;
         this.on('precollision', this.onPreCollision);
+        this.game = game;
     }
 
     onInitialize(engine: ex.Engine): void {
@@ -63,7 +65,7 @@ export default class Boss extends ex.Actor {
     }
 
     private notifyGameClassThisEnemyWasKilled(): void {
-        Game.removeEnemyFromEnemyCounter();
+        this.game.removeEnemyFromEnemyCounter();
     }
 
     private fire(engine: ex.Engine): void {
@@ -72,8 +74,8 @@ export default class Boss extends ex.Actor {
             Config.enemyBulletVelocity * Math.cos(this.fireAngle),
             Config.enemyBulletVelocity * Math.sin(this.fireAngle));
 
-        const bullet = new Bullet(this.pos.x, this.pos.y, bulletVelocity.x, bulletVelocity.y, this);
-        Game.pushBulletInBulletArray(bullet);
+        const bullet = new Bullet(this.pos.x, this.pos.y, bulletVelocity.x, bulletVelocity.y, this.game);
+        this.game.pushBulletInBulletArray(bullet);
         engine.add(bullet);
     }
 }

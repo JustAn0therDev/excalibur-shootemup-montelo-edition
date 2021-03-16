@@ -1,11 +1,12 @@
-import * as ex from "excalibur";
 import Game from '../game';
 import Config from "../config";
+import * as ex from "excalibur";
 import { gameSheet } from "../resources";
 
 export default class Bullet extends ex.Actor {
+    private game: Game;
     owner?: ex.Actor;
-    constructor(x: number, y: number, dx: number, dy: number, owner?: ex.Actor) {
+    constructor(x: number, y: number, dx: number, dy: number, game: Game, owner?: ex.Actor) {
         super({
             pos: new ex.Vector(x, y),
             vel: new ex.Vector(dx, dy),
@@ -14,6 +15,7 @@ export default class Bullet extends ex.Actor {
         });
         this.body.collider.type = ex.CollisionType.Passive;
         this.owner = owner;
+        this.game = game;
     }
     
     onInitialize(engine: ex.Engine): void {
@@ -33,6 +35,6 @@ export default class Bullet extends ex.Actor {
 
     private killAndRemoveFromBullets(): void {
         this.kill();
-        ex.Util.removeItemFromArray(this, Game.baddieBullets);
+        this.game.removeBulletFromBulletArray(this);
     }
 }

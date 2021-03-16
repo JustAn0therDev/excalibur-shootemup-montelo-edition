@@ -1,25 +1,25 @@
-import Boss from '../actors/boss';
-import Baddie from '../actors/baddie';
 import Game from '../game';
 import Config from '../config';
-import enemyFactoryParameter from '../interfaces/parameterObjects/EnemyFactoryParameter';
+import Boss from '../actors/boss';
+import Baddie from '../actors/baddie';
 import { randomIntFromInterval } from '../utils/numberUtils';
+import enemyFactoryParameter from '../interfaces/parameterObjects/EnemyFactoryParameter';
 
 export default class EnemyFactory {
-     static buildEnemy(): ex.Actor | undefined {
-        if (Game.canRenderAnotherEnemyOnScreen()) {
+    static buildEnemy(game: Game): ex.Actor | undefined {
+        if (game.canRenderAnotherEnemyOnScreen()) {
             const dataToCreateEnemy: enemyFactoryParameter = {
                 vectorX: Math.random() * 1000,
                 vectorY: -100,
                 width: 80,
                 height: 80
             }
-            return this.checkKindOfEnemyThenReturnIt(dataToCreateEnemy);
+            return this.checkKindOfEnemyThenReturnIt(dataToCreateEnemy, game);
         }
         return undefined;
     }
 
-    private static checkKindOfEnemyThenReturnIt(dataToCreateNewEnemy: enemyFactoryParameter): 
+    private static checkKindOfEnemyThenReturnIt(dataToCreateNewEnemy: enemyFactoryParameter, game: Game): 
     ex.Actor 
     {
         if (this.shouldGenerateBoss()) {
@@ -27,14 +27,16 @@ export default class EnemyFactory {
                 dataToCreateNewEnemy.vectorX, 
                 dataToCreateNewEnemy.vectorY, 
                 dataToCreateNewEnemy.width, 
-                dataToCreateNewEnemy.height);
+                dataToCreateNewEnemy.height, 
+                game);
         } 
 
         return new Baddie(
             dataToCreateNewEnemy.vectorX, 
             dataToCreateNewEnemy.vectorY, 
             dataToCreateNewEnemy.width, 
-            dataToCreateNewEnemy.height
+            dataToCreateNewEnemy.height,
+            game
         );
     }
 

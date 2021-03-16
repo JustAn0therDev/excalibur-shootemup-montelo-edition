@@ -1,13 +1,22 @@
+import stats from "../stats";
+import config from '../config';
 import Boss from "../actors/boss";
 import Baddie from "../actors/baddie";
 import animManager from "../actors/animation-manager";
-import stats from "../stats";
-import config from '../config';
-import { collisionEventCameFromBulletOrBoss } from "./actorUtils";
+import { collisionEventCameFromBoss, collisionEventCameFromPlayerShipsBullet } from "./actorUtils";
 
-export function checkIfEnemyShouldBeKilledOnCollision(
-    enemy: Baddie | Boss, collisionEvent: ex.PreCollisionEvent): void {
-    if(!collisionEventCameFromBulletOrBoss(collisionEvent)) {
+export function checkIfEnemyShouldBeKilledOnCollision(enemy: Baddie | Boss, colEvt: ex.PreCollisionEvent): void {
+    let collidedWithSomething = false;
+
+    console.log(`COLLISION LOG: ENEMY GOT SHOT BY SHIP: ${collisionEventCameFromPlayerShipsBullet(colEvt)}`);
+
+    if (enemy instanceof Baddie) {
+        collidedWithSomething = collisionEventCameFromBoss(colEvt) || collisionEventCameFromPlayerShipsBullet(colEvt);
+    } else {
+        collidedWithSomething = collisionEventCameFromPlayerShipsBullet(colEvt);
+    }
+
+    if (collidedWithSomething) {
         enemy.hp--;
         if (enemy.hp <= 0) {
             if (enemy.explode) {

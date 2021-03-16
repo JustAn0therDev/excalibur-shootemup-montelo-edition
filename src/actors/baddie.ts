@@ -1,19 +1,20 @@
-import * as ex from "excalibur";
 import Game from '../game';
-import Config from "../config";
 import Bullet from "./bullet";
+import Config from "../config";
+import * as ex from "excalibur";
 import AnimationFactory from '../factories/animationFactory';
 import { gameSheet, explosionSpriteSheet } from "../resources";
 import { checkIfEnemyShouldBeKilledOnCollision } from "../utils/collisionUtils";
 
 export default class Baddie extends ex.Actor {
-    private anim?: ex.Animation;
-    private fireAngle: number = Math.random() * Math.PI * 2;
-    explode?: ex.Animation;
-    hp: number = Config.baddieHp;
+    private game: Game;
     fireTimer?: ex.Timer;
+    explode?: ex.Animation;
+    private anim?: ex.Animation;
+    hp: number = Config.baddieHp;
+    private fireAngle: number = Math.random() * Math.PI * 2;
 
-    constructor(x: number, y: number, width: number, height: number) {
+    constructor(x: number, y: number, width: number, height: number, game: Game) {
         super({
             pos: new ex.Vector(x, y),
             width: width,
@@ -22,6 +23,7 @@ export default class Baddie extends ex.Actor {
 
         this.body.collider.type = ex.CollisionType.Passive;
         this.on('precollision', this.onPreCollision);
+        this.game = game;
     }
 
     onInitialize(engine: ex.Engine): void {
@@ -57,7 +59,7 @@ export default class Baddie extends ex.Actor {
     }
 
     private notifyGameClassThisEnemyWasKilled(): void {
-        Game.removeEnemyFromEnemyCounter();
+        this.game.removeEnemyFromEnemyCounter();
     }
 
     private fire(engine: ex.Engine): void {
@@ -66,8 +68,8 @@ export default class Baddie extends ex.Actor {
             Config.enemyBulletVelocity * Math.cos(this.fireAngle),
             Config.enemyBulletVelocity * Math.sin(this.fireAngle));
 
-        const bullet = new Bullet(this.pos.x, this.pos.y, bulletVelocity.x, bulletVelocity.y, this);
-        Game.pushBulletInBulletArray(bullet);
+        const bullet = new Bullet(this.pos.x, this.pos.y, bulletVelocity.x, bulletVelocity.y, this.game, this);
+        this.game.pushBulletInBulletArray(bullet);
         engine.add(bullet);
     }
 }

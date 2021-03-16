@@ -1,23 +1,26 @@
-import * as ex from 'excalibur';
 import stats from './stats';
+import * as ex from 'excalibur';
+import Ship from './actors/ship';
+import { Actor } from 'excalibur';
 import Bullet from './actors/bullet';
+import Config, { gameConfig } from './config';
 import EnemyFactory from './factories/enemyFactory';
 import animManager from './actors/animation-manager';
-import Ship from './actors/ship';
-import Config, { gameConfig } from './config';
 
 export default class Game extends ex.Scene {
-    static baddieBullets: WeakSet<Bullet> = new WeakSet<Bullet>();
-    private static _numberOfEnemiesOnScreen = 0;
+    baddieBullets: WeakSet<Actor>;
+    NumberOfEnemiesOnScreen: number;
 
     constructor(engine: ex.Engine) {
         super(engine);
+        this.baddieBullets = new WeakSet<Actor>();
+        this.NumberOfEnemiesOnScreen = 0;
     }
 
     onInitialize(engine: ex.Engine): void {
         engine.add(animManager);
 
-        const ship = new Ship(engine.halfDrawWidth, 800, 80, 80);
+        const ship = new Ship(engine.halfDrawWidth, 800, 80, 80, this);
         engine.add(ship);
 
         const scoreLabel = new ex.Label("Score: " + stats.score, 20, 50, 'roboto');
@@ -50,27 +53,27 @@ export default class Game extends ex.Scene {
     private generateEnemyTimer(engine: ex.Engine): ex.Timer {
         const intervalToMakeTimerRepeatForever = -1;
         return new ex.Timer(() => {
-            const generatedEnemy: ex.Actor | undefined = EnemyFactory.buildEnemy();
+            const generatedEnemy: ex.Actor | undefined = EnemyFactory.buildEnemy(this);
             if (generatedEnemy) {
                 engine.add(generatedEnemy);
-                Game._numberOfEnemiesOnScreen++;
+                this.NumberOfEnemiesOnScreen++;
             }
         }, Config.spawnTimeInMilisseconds, true, intervalToMakeTimerRepeatForever);
     }
 
-    static pushBulletInBulletArray(bullet: Bullet): void {
-        Game.baddieBullets.add(bullet);
+    pushBulletInBulletArray(bullet: Bullet): void {
+        this.baddieBullets.add(bullet);
     }
 
-    static removeBulletFromBulletArray(bullet: Bullet): void {
-        ex.Util.removeItemFromArray(bullet, Game.baddieBullets);
+    removeBulletFromBulletArray(bullet: Bullet): void {
+        this.baddieBullets.delete(bullet);
     }
 
-    static canRenderAnotherEnemyOnScreen(): boolean {
-        return Game._numberOfEnemiesOnScreen < Config.limitOfEnemiesOnScreen;
+    canRenderAnotherEnemyOnScreen(): boolean {
+        return this.NumberOfEnemiesOnScreen < Config.limitOfEnemiesOnScreen;
     }
 
-    static removeEnemyFromEnemyCounter(): void {
-        this._numberOfEnemiesOnScreen--;
+    removeEnemyFromEnemyCounter(): void {
+        this.NumberOfEnemiesOnScreen--;
     }
 }

@@ -59,14 +59,15 @@ export default class Baddie extends ex.Actor {
     }
 
     private notifyGameClassThisEnemyWasKilled(): void {
-        this.game.removeEnemyFromEnemyCounter();
+        this.game.NumberOfEnemiesOnScreen--;
     }
 
     private fire(engine: ex.Engine): void {
         this.fireAngle += Math.PI / 20;
         const bulletVelocity = new ex.Vector(
             Config.enemyBulletVelocity * Math.cos(this.fireAngle),
-            Config.enemyBulletVelocity * Math.sin(this.fireAngle));
+            Config.enemyBulletVelocity * Math.sin(this.fireAngle)
+        );
 
         const bullet = new Bullet(this.pos.x, this.pos.y, bulletVelocity.x, bulletVelocity.y, this.game, this);
         this.game.pushBulletInBulletArray(bullet);

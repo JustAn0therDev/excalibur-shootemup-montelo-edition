@@ -25,5 +25,6 @@ export default {
    scoreGainedFromKillingBaddie: 100,
    scoreGainedFromKillingBoss: 500,
    chancesOfGeneratingBoss: 10,
-   limitOfEnemiesOnScreen: 3
+   limitOfEnemiesOnScreen: 3,
+   intervalToMakeTimerRepeatForever: -1
 }

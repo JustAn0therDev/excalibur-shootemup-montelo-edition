@@ -2,31 +2,27 @@ import stats from "../stats";
 import config from '../config';
 import Boss from "../actors/boss";
 import Baddie from "../actors/baddie";
+import { PreCollisionEvent } from 'excalibur';
 import animManager from "../actors/animation-manager";
-import { collisionEventCameFromBoss, collisionEventCameFromPlayerShipsBullet } from "./actorUtils";
+import { collisionEventCameFromPlayerShipsBullet } from "./actorUtils";
 
-export function checkIfEnemyShouldBeKilledOnCollision(enemy: Baddie | Boss, colEvt: ex.PreCollisionEvent): void {
-    let collidedWithSomething = false;
+// Apparently, an actor is always listening to events, the problem is having a bunch of enemies at the same time
+// on the screen, resulting in: "amountOfEvents * numberOfEnemies"
+export function checkIfEnemyShouldBeKilledOnCollision(enemy: Baddie | Boss, evt: PreCollisionEvent): void {
+    let collided = collisionEventCameFromPlayerShipsBullet(evt);
+    console.log(`Enemy collided with something that is not a baddie nor a boss: ${collided}`);
 
-    console.log(`COLLISION LOG: ENEMY GOT SHOT BY SHIP: ${collisionEventCameFromPlayerShipsBullet(colEvt)}`);
-
-    if (enemy instanceof Baddie) {
-        collidedWithSomething = collisionEventCameFromBoss(colEvt) || collisionEventCameFromPlayerShipsBullet(colEvt);
-    } else {
-        collidedWithSomething = collisionEventCameFromPlayerShipsBullet(colEvt);
-    }
-
-    if (collidedWithSomething) {
+    if (collided) {
         enemy.hp--;
         if (enemy.hp <= 0) {
-            if (enemy.explode) {
+            if (enemy.explode) 
                 animManager.play(enemy.explode, enemy.pos);
-            }
-            stats.score += config.scoreGainedFromKillingBoss;
+            
+            stats.score += enemy instanceof Baddie ? config.scoreGainedFromKillingBaddie : config.scoreGainedFromKillingBoss;
 
-            if (enemy.fireTimer) {
+            if (enemy.fireTimer)
                 enemy.fireTimer.cancel();
-            }
+            
             enemy.kill();
         }
     }

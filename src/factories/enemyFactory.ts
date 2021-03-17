@@ -6,7 +6,7 @@ import { randomIntFromInterval } from '../utils/numberUtils';
 import enemyFactoryParameter from '../interfaces/parameterObjects/EnemyFactoryParameter';
 
 export default class EnemyFactory {
-    static buildEnemy(game: Game): ex.Actor | undefined {
+    static buildEnemy(game: Game): ex.Actor | null {
         if (game.canRenderAnotherEnemyOnScreen()) {
             const dataToCreateEnemy: enemyFactoryParameter = {
                 vectorX: Math.random() * 1000,
@@ -14,13 +14,14 @@ export default class EnemyFactory {
                 width: 80,
                 height: 80
             }
+
             return this.checkKindOfEnemyThenReturnIt(dataToCreateEnemy, game);
         }
-        return undefined;
+
+        return null;
     }
 
-    private static checkKindOfEnemyThenReturnIt(dataToCreateNewEnemy: enemyFactoryParameter, game: Game): 
-    ex.Actor 
+    private static checkKindOfEnemyThenReturnIt(dataToCreateNewEnemy: enemyFactoryParameter, game: Game): ex.Actor 
     {
         if (this.shouldGenerateBoss()) {
             return new Boss(

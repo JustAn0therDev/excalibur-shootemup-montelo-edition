@@ -5,11 +5,7 @@ import Bullet from '../actors/bullet';
 import { Actor, PreCollisionEvent } from 'excalibur';
 
 export function collisionEventCameFromPlayerShipsBullet(evt: PreCollisionEvent<Actor>): boolean {
-    return evt.other instanceof Bullet && evt.actor instanceof Ship;
-}
-
-export function collisionEventCameFromBullet(evt: ex.PreCollisionEvent<Actor>): boolean {
-    return evt.other instanceof Bullet;
+    return evt.actor instanceof Bullet;
 }
 
 export function collisionEventCameFromBaddieOrBossBullet(evt: PreCollisionEvent<Actor>) {

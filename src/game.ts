@@ -8,12 +8,12 @@ import EnemyFactory from './factories/enemyFactory';
 import animManager from './actors/animation-manager';
 
 export default class Game extends ex.Scene {
-    baddieBullets: WeakSet<Actor>;
+    BaddieBullets: WeakSet<Actor>;
     NumberOfEnemiesOnScreen: number;
 
     constructor(engine: ex.Engine) {
         super(engine);
-        this.baddieBullets = new WeakSet<Actor>();
+        this.BaddieBullets = new WeakSet<Actor>();
         this.NumberOfEnemiesOnScreen = 0;
     }
 
@@ -23,7 +23,7 @@ export default class Game extends ex.Scene {
         const ship = new Ship(engine.halfDrawWidth, 800, 80, 80, this);
         engine.add(ship);
 
-        const scoreLabel = new ex.Label("Score: " + stats.score, 20, 50, 'roboto');
+        const scoreLabel = new ex.Label("Score: " + stats.score, 20, 50, 'Consolas');
         scoreLabel.color = gameConfig.scoreLabelColor;
         scoreLabel.scale = new ex.Vector(3, 3);
         scoreLabel.on('preupdate', function(this: ex.Label){
@@ -32,9 +32,9 @@ export default class Game extends ex.Scene {
 
         engine.add(scoreLabel);
 
-        const gameOverLabel = new ex.Label("Game Over - To play again, refresh your browser!",
-                                            engine.halfDrawWidth - 510,
-                                            engine.halfDrawHeight, 'roboto');
+        const gameOverLabel = new ex.Label("Game Over!",
+                                            engine.halfDrawWidth - 80,
+                                            engine.halfDrawHeight, 'Consolas');
 
         gameOverLabel.color = ex.Color.Green;
         gameOverLabel.scale = new ex.Vector(5, 5);
@@ -51,29 +51,24 @@ export default class Game extends ex.Scene {
     }
 
     private generateEnemyTimer(engine: ex.Engine): ex.Timer {
-        const intervalToMakeTimerRepeatForever = -1;
         return new ex.Timer(() => {
-            const generatedEnemy: ex.Actor | undefined = EnemyFactory.buildEnemy(this);
+            const generatedEnemy: ex.Actor | null = EnemyFactory.buildEnemy(this);
             if (generatedEnemy) {
                 engine.add(generatedEnemy);
                 this.NumberOfEnemiesOnScreen++;
             }
-        }, Config.spawnTimeInMilisseconds, true, intervalToMakeTimerRepeatForever);
+        }, Config.spawnTimeInMilisseconds, true, Config.intervalToMakeTimerRepeatForever);
     }
 
     pushBulletInBulletArray(bullet: Bullet): void {
-        this.baddieBullets.add(bullet);
+        this.BaddieBullets.add(bullet);
     }
 
     removeBulletFromBulletArray(bullet: Bullet): void {
-        this.baddieBullets.delete(bullet);
+        this.BaddieBullets.delete(bullet);
     }
 
     canRenderAnotherEnemyOnScreen(): boolean {
         return this.NumberOfEnemiesOnScreen < Config.limitOfEnemiesOnScreen;
-    }
-
-    removeEnemyFromEnemyCounter(): void {
-        this.NumberOfEnemiesOnScreen--;
     }
 }

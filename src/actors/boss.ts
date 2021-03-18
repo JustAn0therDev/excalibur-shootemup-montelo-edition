@@ -1,10 +1,10 @@
-import * as ex from "excalibur";
 import Game from '../game';
-import Config from "../config";
 import Bullet from "./bullet";
+import Config from "../config";
+import * as ex from "excalibur";
 import AnimationFactory from '../factories/animationFactory';
-import { checkIfEnemyShouldBeKilledOnCollision } from '../utils/collisionUtils';
 import { gameSheet, explosionSpriteSheet } from "../resources";
+import { checkIfEnemyShouldBeKilledOnCollision } from '../utils/collisionUtils';
 
 export default class Boss extends ex.Actor {
     private anim?: ex.Animation;
@@ -60,7 +60,7 @@ export default class Boss extends ex.Actor {
     }
 
     private onPreCollision(evt: ex.PreCollisionEvent): void {
-        checkIfEnemyShouldBeKilledOnCollision(this, evt);
+        checkIfEnemyShouldBeKilledOnCollision(this, evt, this.game);
         this.notifyGameClassThisEnemyWasKilled();
     }
 

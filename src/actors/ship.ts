@@ -72,8 +72,10 @@ export default class Ship extends ex.Actor {
     }
 
     onPreCollision(evt: ex.PreCollisionEvent): void {
-        const collidedWithEnemy = collisionEventCameFromBaddieOrBossBullet(evt) || collisionEventCameFromBaddie(evt) || collisionEventCameFromBoss(evt);
-        if (collidedWithEnemy) {
+        const collidedWithEnemyBulletOrBody = 
+            collisionEventCameFromBaddieOrBossBullet(evt, this.game) || collisionEventCameFromBaddie(evt) || collisionEventCameFromBoss(evt);
+
+        if (collidedWithEnemyBulletOrBody) {
             this.actions.blink(300, 300, 3);
             stats.hp -= Config.enemyDamage;
             if (stats.hp <= 0) {

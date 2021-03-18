@@ -50,11 +50,12 @@ export default class Baddie extends ex.Actor {
                                             Config.enemyFireIntervalInMilisseconds, 
                                             true, 
                                             intervalToMakeTimerRepeatForever);
-        engine.addTimer(this.fireTimer);
+        engine.addTimer(this.fireTimer); 
+        
     }
 
     private onPreCollision(evt: ex.PreCollisionEvent): void {
-        checkIfEnemyShouldBeKilledOnCollision(this, evt);
+        checkIfEnemyShouldBeKilledOnCollision(this, evt, this.game);
         this.notifyGameClassThisEnemyWasKilled();
     }
 

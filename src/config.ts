@@ -10,7 +10,7 @@ export const gameConfig = {
 export default {
    playerBulletVelocity: -375,
    playerSpeed: 700,
-   playerFireThrottle: 50,
+   playerFireThrottle: 100,
    missileSpeed: -400,
    enemyBulletVelocity: 400,
    enemySpeed: 300,

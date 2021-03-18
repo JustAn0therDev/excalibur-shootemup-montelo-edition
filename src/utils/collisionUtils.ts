@@ -25,6 +25,7 @@ export function checkIfEnemyShouldBeKilledOnCollision(enemy: Baddie | Boss, evt:
                 enemy.fireTimer.cancel();
             
             enemy.kill();
+            enemy.notifyGameClassThisEnemyWasKilled();
         }
     }
 }

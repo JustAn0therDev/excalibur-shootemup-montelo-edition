@@ -11,13 +11,13 @@ export default class Game extends ex.Scene {
     BaddieBullets: WeakSet<Actor>;
     NumberOfEnemiesOnScreen: number;
 
-    constructor(engine: ex.Engine) {
+    constructor(engine:ex.Engine) {
         super(engine);
         this.BaddieBullets = new WeakSet<Actor>();
         this.NumberOfEnemiesOnScreen = 0;
     }
 
-    onInitialize(engine: ex.Engine): void {
+    onInitialize(engine:ex.Engine): void {
         engine.add(animManager);
 
         const ship = new Ship(engine.halfDrawWidth, 800, 80, 80, this);
@@ -26,7 +26,7 @@ export default class Game extends ex.Scene {
         const scoreLabel = new ex.Label("Score: " + stats.score, 20, 50, 'Consolas');
         scoreLabel.color = gameConfig.scoreLabelColor;
         scoreLabel.scale = new ex.Vector(3, 3);
-        scoreLabel.on('preupdate', function(this: ex.Label){
+        scoreLabel.on('preupdate', function(this:ex.Label){
             this.text = "Score: " + stats.score;
         });
 
@@ -52,9 +52,8 @@ export default class Game extends ex.Scene {
 
     private generateEnemyTimer(engine: ex.Engine): ex.Timer {
         return new ex.Timer(() => {
-            const generatedEnemy: ex.Actor | null = EnemyFactory.buildEnemy(this);
-            if (generatedEnemy) {
-                engine.add(generatedEnemy);
+            if (this.canRenderAnotherEnemyOnScreen()) {
+                engine.add(EnemyFactory.buildEnemy(this));
                 this.NumberOfEnemiesOnScreen++;
             }
         }, Config.spawnTimeInMilisseconds, true, Config.intervalToMakeTimerRepeatForever);

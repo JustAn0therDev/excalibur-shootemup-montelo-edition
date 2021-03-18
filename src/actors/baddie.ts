@@ -54,13 +54,12 @@ export default class Baddie extends ex.Actor {
         
     }
 
-    private onPreCollision(evt: ex.PreCollisionEvent): void {
-        checkIfEnemyShouldBeKilledOnCollision(this, evt, this.game);
-        this.notifyGameClassThisEnemyWasKilled();
+    public notifyGameClassThisEnemyWasKilled(): void {
+        this.game.NumberOfEnemiesOnScreen--;
     }
 
-    private notifyGameClassThisEnemyWasKilled(): void {
-        this.game.NumberOfEnemiesOnScreen--;
+    private onPreCollision(evt: ex.PreCollisionEvent): void {
+        checkIfEnemyShouldBeKilledOnCollision(this, evt, this.game);
     }
 
     private fire(engine: ex.Engine): void {

@@ -12,7 +12,7 @@ export default {
    playerSpeed: 700,
    playerFireThrottle: 50,
    missileSpeed: -400,
-   enemyBulletVelocity: -300,
+   enemyBulletVelocity: 400,
    enemySpeed: 300,
    enemyFireIntervalInMilisseconds: 700,
    bossFireIntervalInMilisseconds: 200,

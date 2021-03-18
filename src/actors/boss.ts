@@ -59,14 +59,14 @@ export default class Boss extends ex.Actor {
         engine.addTimer(this.fireTimer);
     }
 
-    private onPreCollision(evt: ex.PreCollisionEvent): void {
-        checkIfEnemyShouldBeKilledOnCollision(this, evt, this.game);
-        this.notifyGameClassThisEnemyWasKilled();
-    }
-
-    private notifyGameClassThisEnemyWasKilled(): void {
+    public notifyGameClassThisEnemyWasKilled(): void {
         this.game.NumberOfEnemiesOnScreen--;
     }
+
+    private onPreCollision(evt: ex.PreCollisionEvent): void {
+        checkIfEnemyShouldBeKilledOnCollision(this, evt, this.game);
+    }
+
 
     private fire(engine: ex.Engine): void {
         this.fireAngle += Math.PI/20;
